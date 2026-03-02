@@ -1,65 +1,167 @@
-import Image from "next/image";
+"use client";
+
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import ProjectCard from "@/components/ProjectCard";
+import AIWorkflow from "@/components/AIWorkflow";
+import PersonalProjects from "@/components/PersonalProjects";
+import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeContext";
+
+const projects = [
+  {
+    date: "Jan 9, 2026",
+    company: "Constant Contact",
+    headline:
+      "Initial results show 24% lift in send completion, improving activation",
+    title: "Schedule Page",
+    tags: [
+      { label: "Growth Experiment" },
+      { label: "Design lead" },
+    ],
+    description:
+      "By lowering cognitive overhead and improving send flow, early results from this experiment are showing an improvement in trial user sends, improving heavy drop off rate.",
+    accentColor: "purple" as const,
+    comingSoon: true,
+    imagePlaceholder: "Schedule page mockup",
+    imageSrc: "/animations/schedulepage.jpg",
+  },
+  {
+    date: "Dec 15, 2025",
+    company: "Constant Contact",
+    headline:
+      "+69% increase in first email sends by streamlining mobile web activation flows",
+    title: "Mobile Web Experience",
+    tags: [
+      { label: "Growth Experiment" },
+      { label: "Design lead" },
+      { label: "6-day turnaround" },
+      { label: "Figma Make" },
+    ],
+    description:
+      "Reduced cognitive overhead across creation, sending, and required setup steps to accelerate activation without impacting monetization.",
+    accentColor: "purple" as const,
+    href: "/mobilewebexperience",
+    imagePlaceholder: "Mobile web mockup",
+    videoSrc: "/animations/mweb-experience.mp4",
+  },
+  {
+    date: "Nov 3, 2025",
+    company: "Constant Contact",
+    headline:
+      "2x creator-to-sender conversion and +125% lift in second email sends",
+    title: "Mobile Email Editor",
+    tags: [
+      { label: "Growth Experiment" },
+      { label: "Patent Pending" },
+      { label: "Design lead" },
+    ],
+    description:
+      "Adapted a previously validated native editor into a robust mobile web system to strengthen the send–refine–send behavior tied directly to activation and revenue.",
+    accentColor: "blue" as const,
+    href: "/mobileeditor",
+    imagePlaceholder: "Mobile editor mockup",
+    videoSrc: "/animations/mobile-editor.mp4",
+  },
+  {
+    date: "Nov 19, 2025",
+    company: "Constant Contact",
+    headline:
+      "+11.9% lift in file upload adoption by reducing friction in high intent workflow",
+    title: "Contacts Upload Experience",
+    tags: [
+      { label: "Lead growth designer" },
+      { label: "~ 24,000 monthly users" },
+      { label: "Statsig in 1.5 weeks" },
+      { label: "Growth Experiment" },
+    ],
+    description:
+      "Simplified upload, mapping, and consent flows to eliminate false completion signals and increase list growth in a high-intent moment.",
+    accentColor: "blue" as const,
+    href: "/contacts",
+    imagePlaceholder: "Contacts upload mockup",
+    videoSrc: "/animations/contacts-upload.mp4",
+  },
+  {
+    date: "May 12, 2025",
+    company: "Constant Contact",
+    headline:
+      "+140% increase in post completion and +81% increase in feature adoption",
+    title: "Social Management",
+    tags: [{ label: "New Feature" }],
+    description:
+      "Reduced friction in cross-posting by unifying account selection, clarifying posting states, and guiding users on what to publish, improving speed, confidence, and daily usage.",
+    accentColor: "green" as const,
+    href: "/social",
+    imagePlaceholder: "Social management mockup",
+    videoSrc: "/animations/social.mp4",
+  },
+  {
+    date: "Nov 24, 2021",
+    company: "Constant Contact",
+    headline: "21% lift in trial user activation + conversions",
+    title: "Brand Kit",
+    tags: [
+      { label: "Feature" },
+      { label: "400,000+ users" },
+    ],
+    description:
+      "Replaced manual brand configuration with a guided, automated system that maps logos and colors intelligently, reducing setup friction while preserving user control.",
+    accentColor: "green" as const,
+    href: "/brandkit",
+    imagePlaceholder: "Brand kit mockup",
+    videoSrc: "/animations/brandkit.mp4",
+    timelinePt: "pt-[52px]",
+  },
+];
+
+function HomeContent() {
+  return (
+    <div className="min-h-screen" style={{ background: "var(--color-background)", color: "var(--color-foreground)" }}>
+      <Header />
+      <Hero />
+
+      <section className="max-w-[1200px] mx-auto px-5 md:px-10 pb-6 flex flex-col gap-0">
+        {projects.slice(0, 2).map((project, i) => (
+          <div
+            key={project.title}
+            className="animate-fade-in-up"
+            style={{ animationDelay: `${i * 80}ms` }}
+          >
+            {i === 0 && (
+              <h2 className="section-heading px-0 md:px-4">
+                Recent Projects
+              </h2>
+            )}
+            <ProjectCard {...project} />
+          </div>
+        ))}
+      </section>
+
+      <AIWorkflow />
+
+      <section className="max-w-[1200px] mx-auto px-5 md:px-10 pb-6 flex flex-col gap-0">
+        {projects.slice(2).map((project, i) => (
+          <div
+            key={project.title}
+            className="animate-fade-in-up"
+            style={{ animationDelay: `${(i + 2) * 80}ms` }}
+          >
+            <ProjectCard {...project} />
+          </div>
+        ))}
+      </section>
+
+      <PersonalProjects />
+      <Footer />
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <ThemeProvider>
+      <HomeContent />
+    </ThemeProvider>
   );
 }
