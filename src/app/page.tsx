@@ -570,9 +570,23 @@ function Footer() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("portfolio-theme");
+    if (saved !== null) setIsDark(saved === "dark");
+  }, []);
+
+  function toggleTheme() {
+    setIsDark(d => {
+      const next = !d;
+      localStorage.setItem("portfolio-theme", next ? "dark" : "light");
+      return next;
+    });
+  }
+
   return (
     <div style={{ ...(isDark ? darkVars : lightVars), background: BG, color: TEXT, minHeight: "100vh", transition: "background 0.4s, color 0.4s" }}>
-      <Nav isDark={isDark} onToggle={() => setIsDark(d => !d)} />
+      <Nav isDark={isDark} onToggle={toggleTheme} />
       <Hero />
 
       <section className="max-w-[1200px] mx-auto px-5 md:px-10 pb-6 flex flex-col gap-12 md:gap-0">

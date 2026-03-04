@@ -1,0 +1,6 @@
+{
+  "description": "Personal portfolio website",
+  "status": "active",
+  "stack": ["Next.js", "TypeScript", "Tailwind CSS"],
+  "notes": "The portfolio homepage is fully redesigned with a dark-first glass UI — self-contained in page.tsx with CSS variable-based theming and a working dark/light toggle in the nav. Project cards now use glass containers that hug content, with timeline dashes extending on the bare background. Next: refine light mode styling and consider adding the about page to the new design system."
+}
