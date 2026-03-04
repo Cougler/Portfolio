@@ -15,23 +15,24 @@ const tools = ["Figma", "Notion", "Jira", "User Testing"];
 const blocks: ContentBlock[] = [
   {
     type: "section",
-    title: "The Problem: High Intent, Low Return",
+    title: "Overview",
     content: (
       <>
         <p>
-          Social posting on desktop was established and functional. On mobile,
-          however, the experience was fragmented, inconsistent, and slow. Usage
-          data showed that while many users tried the feature once, very few
-          returned. Activation was not the issue. Retention was.
+          Mobile social posting existed inside Constant Contact, but retention
+          was poor. Many users tried it once and never came back. This wasn&rsquo;t
+          an activation problem — users understood the feature and chose to use
+          it. The problem was that the workflow was too costly to repeat. The
+          friction compounded every time someone tried to post across platforms,
+          manage multiple accounts, or figure out what to say.
         </p>
         <p className="mt-4">
-          The friction was structural. Cross-posting required repetitive setup.
-          Account management lived outside the creation flow. Platform nuances
-          were not respected. What should have felt lightweight and flexible
-          instead felt procedural and heavy.
-        </p>
-        <p className="mt-4">
-          This wasn&rsquo;t as much a feature gap as it was a workflow problem.
+          I led the redesign of the mobile social posting experience, targeting
+          three structural problems: account management that lived outside the
+          creation flow, cross-posting that required repetitive manual adaptation,
+          and content uncertainty that caused users to abandon before publishing.
+          The work spanned research, systems design, and iterative rollout over
+          several months.
         </p>
         <div className="mt-6 grid grid-cols-2 gap-2">
           {[
@@ -57,131 +58,116 @@ const blocks: ContentBlock[] = [
   },
   {
     type: "section",
-    title: "Analyzing the Landscape Before Redesigning It",
+    title: "The Problem",
     content: (
       <>
         <p>
-          Before redesigning, I audited native posting experiences across
-          Facebook, Instagram, and LinkedIn to understand how platform-specific
-          behaviors shaped user expectations. Each platform optimized for
-          immediacy and clarity.
+          Usage data showed that while many users tried mobile social posting,
+          very few returned after the first session. Retention, not activation,
+          was the gap. The friction was structural: cross-posting required
+          repetitive setup for each platform, account management lived in
+          settings rather than inside the creation flow, and platform nuances
+          like character limits, tone expectations, and formatting differences
+          were handled entirely by the user. What should have felt lightweight
+          felt procedural.
         </p>
         <p className="mt-4">
-          Our experience attempted to consolidate cross-posting but introduced
-          complexity in the process. The opportunity was not to replicate native
-          flows, but to unify them intelligently. The goal was to reduce effort
-          while preserving platform integrity and brand consistency.
+          Before redesigning anything, I audited native posting on Facebook,
+          Instagram, and LinkedIn. Each platform optimized for immediacy and
+          clarity — minimal steps between intent and publish. Our experience
+          tried to consolidate cross-posting but introduced complexity instead.
+          That gap pointed to three specific areas: how accounts were managed,
+          how content was adapted across platforms, and how users handled not
+          knowing what to say.
         </p>
       </>
     ),
   },
   {
     type: "section",
-    title: "Multi-Account Posting: Simplicity vs. Control",
+    title: "Rethinking Account Management",
     content: (
       <>
         <p>
-          Many small business owners operate across multiple social accounts.
-          While the system supported this structurally, the interaction model
-          made it costly. Managing accounts required exiting the post flow and
-          navigating through settings on a separate surface. Every context switch
-          introduced friction, increased cognitive load, and lowered the
-          likelihood of completion.
+          If a user realized mid-composition that they needed to adjust a
+          connected account, they had to abandon their draft and navigate into
+          settings to make the change. On mobile, that interruption reliably
+          ended the session. The interaction model treated account management as
+          a configuration concern rather than a workflow concern — which was
+          accurate architecturally but wrong for how people actually used the
+          product.
         </p>
         <p className="mt-4">
-          Account management was disconnected from the moment it mattered most
-          &mdash; during creation. If a user realized they needed to adjust an
-          account mid-composition, they were forced to abandon their draft and
-          move through multiple layers of the app. On mobile, that interruption
-          was especially disruptive.
-        </p>
-        <p className="mt-4">
-          We repositioned account controls directly within the publishing
-          workflow. Users could add, remove, or switch accounts without leaving
-          the post experience, preserving intent and momentum. This transformed
-          account management from a back-office configuration task into an
-          integrated workflow capability.
+          I repositioned account controls directly within the publishing
+          workflow. Users can now add, remove, or switch accounts without
+          leaving the post experience. The draft stays intact, the context
+          stays intact, and the decision to adjust an account becomes a
+          low-cost action rather than a flow-breaking one.
         </p>
       </>
     ),
   },
   {
     type: "section",
-    title: "Shifting the Focus from Distribution to Efficiency",
+    title: "Reducing Cross-Platform Friction",
     content: (
       <>
         <p>
-          Early conversations with small business owners revealed a pattern.
-          They were not struggling with where to post. They were struggling with
-          the time required to adapt content for each platform.
+          Early sessions with small business owners made clear that the struggle
+          wasn&rsquo;t WHERE to post — it was the time required to adapt content
+          for each platform. Users were either posting the same copy everywhere
+          and accepting it felt off-brand, or manually rewriting posts per
+          platform and giving up partway through.
         </p>
         <p className="mt-4">
-          The redesign shifted the goal from distribution coverage to adaptation
-          efficiency. Instead of forcing users to manually rework posts for
-          every network, we introduced a system that allowed a base message to
-          intelligently adjust per platform. Tone, formatting, and structure
-          were adapted automatically, while still allowing manual refinement.
-        </p>
-        <p className="mt-4">
-          Cross-posting became faster and more intentional, without sacrificing
-          authenticity.
+          I shifted the design goal from distribution coverage to adaptation
+          efficiency. The system now allows a base message to adjust
+          intelligently per platform — tone, formatting, and structure adapted
+          automatically, with manual refinement still available. Cross-posting
+          became faster without removing user control over the result.
         </p>
       </>
     ),
   },
   {
     type: "section",
-    title: "Helping Users Know What to Post",
+    title: "Guiding Content Creation",
     content: (
       <>
         <p>
-          A recurring barrier surfaced in usability sessions: uncertainty. Many
-          users hesitated not because the interface was confusing, but because
-          they were unsure what to say.
+          A recurring pattern from usability sessions was users stalling not
+          because the interface was confusing, but because they didn&rsquo;t
+          know what to say. Blank composer, cursor blinking, session abandoned.
+          This wasn&rsquo;t an edge case — it was a consistent drop-off point
+          visible in both session recordings and qualitative feedback.
         </p>
         <p className="mt-4">
-          We introduced contextual prompts tailored to each selected platform.
-          Rather than generic suggestions, the system surfaced guidance aligned
-          to platform norms and business category. Over time, this layer evolved
-          into lightweight AI-assisted recommendations, helping users generate
-          starting points without replacing their voice.
-        </p>
-        <p className="mt-4">
-          This shifted the experience from mechanical publishing to guided
-          creation.
+          I introduced contextual prompts tailored to each selected platform
+          and business category. These evolved into lightweight AI-assisted
+          recommendations that generate starting points without replacing the
+          user&rsquo;s voice. The goal was to reduce the cost of beginning, not
+          to automate the post. Getting users past the blank state meant
+          significantly more sessions ended in a publish.
         </p>
       </>
     ),
   },
   {
     type: "section",
-    title: "Expanding the Experience Through Iteration",
+    title: "Results",
     content: (
       <>
         <p>
-          The initial release focused on simplifying the core flow, embedding
-          account management into context, and improving cross-platform
-          adaptation. From there, we expanded the system to support video
-          uploads, hashtag lookup, improved media handling, and clearer previews.
+          After multiple UXR testing rounds, we launched to 20% of users.
+          Two weeks in, no incidents and consistent positive signal across
+          completion rates and qualitative feedback. We moved to 100% rollout
+          within that window.
         </p>
-        <p className="mt-4">
-          Each iteration was driven by usability sessions, analytics, and
-          session recordings that revealed where users hesitated or dropped off.
-          Improvements were incremental but compounding.
+        <p className="mt-4 font-semibold text-foreground">
+          Post completion rate increased 144%. Feature adoption increased 81%
+          in the first three months.
         </p>
       </>
-    ),
-  },
-  {
-    type: "section",
-    title: "Validation and Rollout",
-    content: (
-      <p>
-        Following multiple successful test rounds with UXR, we launched a
-        partial rollout to 20% of our user base. Within two weeks, after no
-        incidents and consistent positive feedback, the feature was rolled out
-        to 100% of users.
-      </p>
     ),
   },
   {
@@ -189,32 +175,35 @@ const blocks: ContentBlock[] = [
     groups: [
       {
         title: "Results",
+        description:
+          "Measured post-launch across UXR-validated rollout from 20% to 100% of users within two weeks.",
         metrics: [
-          { value: "+81%", label: "Feature adoption (first 3 months)" },
           { value: "+144%", label: "Post completion rate" },
+          { value: "+81%", label: "Feature adoption (first 3 months)" },
         ],
       },
     ],
   },
   {
     type: "section",
-    title: "The Takeaway",
+    title: "Reflection",
     content: (
       <>
         <p>
-          This redesign wasn&rsquo;t about adding new features &mdash; it was
-          about eliminating friction and matching how small business owners
-          actually work.
+          The numbers came from fixing structural friction, not from adding
+          features. Repositioning account management, building adaptation into
+          the system, and reducing the cost of beginning all targeted moments
+          where the workflow was working against users rather than with them.
+          None of it was conceptually novel — it was the kind of work that only
+          shows up clearly after you spend enough time watching where people
+          actually stop.
         </p>
         <p className="mt-4">
-          By grounding the experience in real behavior, unifying mobile and web
-          patterns, and using AI to reduce effort rather than add novelty, we
-          transformed social posting from an underused utility into a core
-          engagement feature.
-        </p>
-        <p className="mt-4 font-semibold text-foreground">
-          The lesson was clear: when speed and clarity align with user
-          motivation, adoption follows naturally.
+          The AI content layer opened up something worth continuing. Helping
+          users past the blank state without scripting their voice is a narrow
+          but meaningful target, and there&rsquo;s more to build there —
+          especially as posting behavior diversifies across video, short-form,
+          and platform-specific formats.
         </p>
       </>
     ),

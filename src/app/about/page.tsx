@@ -33,7 +33,7 @@ const testimonials = [
     name: "Savannah Chase",
     title: "Senior Product Designer",
     quote:
-      "I thoroughly enjoyed my time working alongside of Aaron. He is kind and considerate, yet direct and efficient — a true team player in every sense. His passion for UX extends beyond his day job, making him an enthusiastic student of the craft even in his off time. As a fellow team member, there is always something to learn from Aaron.",
+      "I thoroughly enjoyed my time working alongside of Aaron. He is kind and considerate, yet direct and efficient, a true team player in every sense. His passion for UX extends beyond his day job, making him an enthusiastic student of the craft even in his off time. As a fellow team member, there is always something to learn from Aaron.",
   },
   {
     name: "Shirin Salehe",
@@ -169,12 +169,12 @@ export default function AboutPage() {
               <p>
                 I move quickly when momentum matters and slow down when decisions
                 have long-term impact. Collaboration, to me, is shared ownership
-                &mdash; not just clean handoffs, but open communication, honest
+                not just clean handoffs, but open communication, honest
                 feedback, and accountability when something feels off.
               </p>
               <p>
                 AI is part of how I think and work. It&rsquo;s not about
-                automation for its own sake &mdash; it&rsquo;s about clearing
+                automation for its own sake. It&rsquo;s about clearing
                 space for better decisions, faster prototyping, and new
                 possibilities that strengthen design outcomes without draining
                 the team.

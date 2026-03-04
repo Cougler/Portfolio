@@ -85,7 +85,7 @@ function TableRow({ widths, highlighted }: { widths: string[]; highlighted?: boo
 
 function SnowflakeWindow() {
   return (
-    <div className="relative flex flex-col rounded-lg border border-[#e2e8f0] bg-white shadow-sm overflow-hidden w-[150px] md:w-[180px] shrink-0">
+    <div className="relative flex flex-col rounded-lg border border-[#e2e8f0] bg-white shadow-sm overflow-hidden w-[140px] shrink-0">
       {/* Title bar */}
       <div className="flex items-center gap-1 px-2 py-1.5 bg-[#f8fafc] border-b border-[#e2e8f0]">
         <span className="w-[6px] h-[6px] rounded-full bg-[#ff5f57]" />
@@ -138,7 +138,7 @@ function SnowflakeWindow() {
 
 function CursorWindow({ isActive }: { isActive: boolean }) {
   return (
-    <div className="relative flex flex-col rounded-lg border border-[#2a2a2e] bg-[#1e1e1e] shadow-sm overflow-hidden w-[150px] md:w-[180px] shrink-0">
+    <div className="relative flex flex-col rounded-lg border border-[#2a2a2e] bg-[#1e1e1e] shadow-sm overflow-hidden w-[140px] shrink-0">
       {/* Title bar */}
       <div className="flex items-center gap-1 px-2 py-1.5 bg-[#252526] border-b border-[#3c3c3c]">
         <span className="w-[6px] h-[6px] rounded-full bg-[#ff5f57]" />
@@ -314,17 +314,16 @@ function ConnectionLines({ isActive }: { isActive: boolean }) {
 
 export default function DataFlowAnimation({ isActive }: { isActive: boolean }) {
   return (
-    <div
-      className="relative w-full h-full flex items-center justify-center px-4 py-6"
-      style={{ animationPlayState: isActive ? "running" : "paused" }}
-    >
-      <div
-        className="relative flex items-center justify-between w-full max-w-[440px]"
-        style={{ ["--play-state" as string]: isActive ? "running" : "paused" }}
-      >
-        <SnowflakeWindow />
-        <ConnectionLines isActive={isActive} />
-        <CursorWindow isActive={isActive} />
+    <div className="relative w-full h-full flex items-center justify-center">
+      <div className="relative" style={{ width: 200, height: 170 }}>
+        {/* Snowflake — bottom layer */}
+        <div className="absolute top-0 left-0" style={{ zIndex: 1 }}>
+          <SnowflakeWindow />
+        </div>
+        {/* Cursor — top layer, offset right and down */}
+        <div className="absolute bottom-0 right-0" style={{ zIndex: 2 }}>
+          <CursorWindow isActive={isActive} />
+        </div>
       </div>
     </div>
   );

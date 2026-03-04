@@ -21,6 +21,7 @@ export type ProjectCardProps = {
   videoSrc?: string;
   imageSrc?: string;
   timelinePt?: string;
+  index?: number;
 };
 
 const accentClasses = {
@@ -105,6 +106,7 @@ export default function ProjectCard({
   videoSrc,
   imageSrc,
   timelinePt,
+  index,
 }: ProjectCardProps) {
   const inner = (
     <div
@@ -114,11 +116,16 @@ export default function ProjectCard({
       <div className="flex flex-col md:flex-row pt-3 pb-6 px-0 md:px-4 md:min-h-[1100px] gap-0 md:gap-6">
         {/* Left column: date/company + timeline */}
         <div className="md:w-[140px] shrink-0 md:mr-12 flex flex-col">
-          <div className="flex items-baseline gap-2 md:block mb-2 md:mb-0">
-            <p className="text-[13px] font-medium text-foreground leading-snug font-[family-name:var(--font-inter)]">
+          {index !== undefined && (
+            <p className="md:hidden text-[11px] font-mono text-muted/50 mb-2 tracking-widest">
+              {String(index).padStart(2, "0")}
+            </p>
+          )}
+          <div className="hidden md:block mb-2 md:mb-0">
+            <p className="text-[13px] font-medium text-foreground leading-snug font-mono">
               {date}
             </p>
-            <p className="text-[12px] text-muted leading-snug md:mb-4 font-[family-name:var(--font-inter)]">
+            <p className="text-[12px] text-muted leading-snug md:mb-4 font-mono">
               {company}
             </p>
           </div>
@@ -130,7 +137,7 @@ export default function ProjectCard({
 
         {/* Right column */}
         <div className="flex-1 min-w-0 pb-2">
-          <h2 className="text-[1.25rem] md:text-[1.75rem] font-bold leading-[1.2] tracking-[-0.01em] mb-4 md:mb-6 font-[family-name:var(--font-inter)]">
+          <h2 className="text-[1.1rem] md:text-[1.75rem] font-bold leading-[1.2] tracking-[-0.01em] mb-4 md:mb-6 font-[family-name:var(--font-inter)]">
             {highlightMetrics(headline)}
           </h2>
 
@@ -155,48 +162,57 @@ export default function ProjectCard({
             )}
           </div>
 
-          <div className="flex items-center justify-between gap-4 md:gap-6 mb-3 mt-2">
-            <h3 className="text-[15px] md:text-[16px] font-bold text-foreground tracking-[-0.01em] font-[family-name:var(--font-inter)]">
+          <div className="flex items-center justify-between gap-4 md:gap-6 mb-1 md:mb-3 mt-2">
+            <h3 className="text-[16px] md:text-[16px] font-bold text-foreground tracking-[-0.02em] font-[family-name:var(--font-inter)]">
               {title}
             </h3>
             {comingSoon ? (
-              <span className="text-[12px] font-medium text-muted italic whitespace-nowrap font-[family-name:var(--font-inter)]">
-                Coming soon
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-muted whitespace-nowrap font-[family-name:var(--font-inter)]">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <rect x="0" y="7" width="3" height="6" rx="0.5" fill="currentColor" opacity="0.4">
+                    <animate attributeName="height" values="6;10;6" dur="1.2s" repeatCount="indefinite" begin="0s" />
+                    <animate attributeName="y" values="7;3;7" dur="1.2s" repeatCount="indefinite" begin="0s" />
+                  </rect>
+                  <rect x="5" y="4" width="3" height="9" rx="0.5" fill="currentColor" opacity="0.65">
+                    <animate attributeName="height" values="9;5;9" dur="1.2s" repeatCount="indefinite" begin="0.4s" />
+                    <animate attributeName="y" values="4;8;4" dur="1.2s" repeatCount="indefinite" begin="0.4s" />
+                  </rect>
+                  <rect x="10" y="2" width="3" height="11" rx="0.5" fill="currentColor" opacity="0.9">
+                    <animate attributeName="height" values="11;7;11" dur="1.2s" repeatCount="indefinite" begin="0.8s" />
+                    <animate attributeName="y" values="2;6;2" dur="1.2s" repeatCount="indefinite" begin="0.8s" />
+                  </rect>
+                </svg>
+                Experiment running
               </span>
             ) : href ? (
-              <span className="view-project-link inline-flex items-center gap-1.5 text-[12px] font-medium text-accent whitespace-nowrap font-[family-name:var(--font-inter)]">
+              <span className="view-project-link inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-accent/25 bg-accent/5 text-[11px] font-semibold text-accent whitespace-nowrap font-[family-name:var(--font-inter)] transition-all duration-200 hover:bg-accent/10 hover:border-accent/40">
                 View project
                 <svg
-                  width="11"
-                  height="11"
-                  viewBox="0 0 16 16"
+                  width="10"
+                  height="10"
+                  viewBox="0 0 10 10"
                   fill="none"
                   className="view-project-arrow transition-transform duration-200"
                 >
-                  <path
-                    d="M6 3l5 5-5 5"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <path d="M2 8L8 2M8 2H3.5M8 2V6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
             ) : null}
           </div>
 
-          <div className="flex flex-wrap gap-1.5 mb-3 md:mb-4">
+          <div className="flex items-center gap-2 md:hidden mb-3 mt-3">
+            <span className="text-[11px] font-mono text-muted">{date}</span>
+            <span className="text-[11px] font-mono text-muted/40">·</span>
+            <span className="text-[11px] font-mono text-muted">{company}</span>
+          </div>
+
+          <div className="hidden md:flex flex-wrap items-center gap-x-2 gap-y-1 mb-3 md:mb-4">
             {tags.map((tag, i) => (
-              <span
-                key={tag.label}
-                className={`px-3 py-1 text-[11px] font-medium uppercase tracking-wide font-[family-name:var(--font-inter)] ${
-                  i === 0
-                    ? "bg-accent/10 text-accent"
-                    : "bg-tag-bg text-tag-text"
-                }`}
-                style={{ borderRadius: "var(--theme-tag-radius, 9999px)" }}
-              >
-                {tag.label}
+              <span key={tag.label} className="inline-flex items-center gap-2">
+                {i > 0 && <span className="text-[11px] text-muted/50 font-mono">·</span>}
+                <span className="text-[11px] font-mono text-muted uppercase tracking-wide">
+                  {tag.label}
+                </span>
               </span>
             ))}
           </div>

@@ -15,24 +15,22 @@ const tools = ["Figma", "Notion", "Statsig", "Cursor", "Snowflake MCP"];
 const blocks: ContentBlock[] = [
   {
     type: "section",
-    title: "Context",
+    title: "Overview",
     content: (
       <>
         <p>
-          Within our PLG growth initiative, the team was tasked with identifying
-          choke points across the product and systematically improving them
-          through experimentation. One of those choke points was file-based
-          contact upload.
+          File upload is a high-intent moment. When someone uploads a CSV,
+          they&rsquo;re actively trying to grow their list — not exploring the
+          product, not evaluating a feature. They&rsquo;ve already decided.
+          About 24,000 accounts per month reach this flow, and the drop-off at
+          every stage was significant enough that fixing it was worth treating
+          as a standalone experiment.
         </p>
         <p className="mt-4">
-          File upload was not tied directly to activation, but it was a core
-          behavior for active users attempting to grow their lists. Uploading a
-          CSV is a common real-world workflow. However, users were dropping off
-          at every stage of the flow.
-        </p>
-        <p className="mt-4">
-          The opportunity was clear: reduce friction in a high-intent moment to
-          improve completion and list growth.
+          I led the redesign as the design lead embedded in a PLG growth pod,
+          working directly with two PMs and four engineers. The goal wasn&rsquo;t
+          to rebuild the upload flow — it was to remove the friction that was
+          stopping people from finishing it.
         </p>
         <div className="mt-6 grid grid-cols-3 gap-2">
           {[
@@ -59,156 +57,70 @@ const blocks: ContentBlock[] = [
   },
   {
     type: "section",
-    title: "What We Changed and Why It Mattered",
+    title: "The Problem",
     content: (
       <>
         <p>
-          I led a friction-reduction redesign of the file upload flow, focusing
-          on clarity, continuity, and forward movement. The goal was not to add
-          features, but to remove cognitive overhead in a high-intent workflow.
+          Analytics showed drop-off at every stage of the flow, but the most
+          damaging issue wasn&rsquo;t a broken step — it was a false signal. After
+          selecting a file, a green checkmark appeared on screen. To users, that
+          looked like confirmation that the upload was complete. Many closed the
+          browser and moved on, never knowing they still had mapping and consent
+          steps ahead of them. The flow had an invisible exit built into it.
         </p>
         <p className="mt-4">
-          We eliminated misleading completion signals, simplified the mapping
-          interface, consolidated help content into contextual guidance, improved
-          error states, and converted consent into an inline interaction to
-          preserve momentum. Each change was designed to make the system state
-          obvious and the next action unmistakable.
-        </p>
-        <p className="mt-4">
-          The result was a statistically significant +11.9% lift in file upload
-          adoption, +8.6% increase in total contacts uploaded, and +7.9%
-          increase in contacts per account. The experiment reached significance
-          in two weeks and was rolled out to 100%.
+          Beyond the false completion signal, the mapping interface was visually
+          noisy and hard to parse. Help content was scattered across the UI
+          rather than surfaced where it was needed. The consent step appeared as
+          a blocking interruption that broke the forward momentum users had
+          built. And when uploads failed, the error states were silent — no
+          explanation, no recovery path. Each issue was individually minor. Together,
+          they made completing the flow feel like work.
         </p>
       </>
     ),
   },
   {
     type: "section",
-    title: "Framing the Problem",
+    title: "Redesigning the Upload Flow",
     content: (
       <>
         <p>
-          Through in-app analytics and coordinated user testing, we observed:
+          The redesign didn&rsquo;t touch the underlying architecture. Every change
+          was aimed at reducing friction within the existing system. I removed
+          the false completion signal and replaced it with progressive disclosure
+          language that made the next step explicit. Primary actions after file
+          selection were made more visually prominent so there was no ambiguity
+          about where to go. The field mapping interface was simplified — less
+          visual noise, clearer column relationships. Scattered help documentation
+          was pulled out and replaced with contextual inline guidance at the
+          moments users actually needed it. Consent was converted from a blocking
+          step to an inline modal so it didn&rsquo;t interrupt the flow. And error
+          states were rewritten to explain what went wrong and give users a
+          clear path to recover.
         </p>
-        <ul className="list-disc pl-5 mt-3 space-y-1">
-          <li>Significant drop-off across all upload steps</li>
-          <li>Confusion in the mapping interface</li>
-          <li>Misleading completion signals</li>
-          <li>Interruptive consent patterns</li>
-          <li>Weak forward-movement cues</li>
-        </ul>
         <p className="mt-4">
-          The most damaging issue was a false completion signal. A green
-          checkmark appeared after file selection, leading users to believe the
-          task was complete. Many exited prematurely.
-        </p>
-        <p className="mt-4">
-          The flow lacked clarity, continuity, and strong next-step signaling.
-          Users were forced to interpret system state instead of being guided
-          through it. This was not a single broken step. It was cumulative
-          cognitive overhead.
+          None of these were large surface changes. The bet was that the
+          cumulative effect of removing small friction at every step would
+          meaningfully improve completion — and that the false completion signal
+          alone was doing enough damage to move the primary metric on its own.
         </p>
       </>
     ),
   },
   {
     type: "section",
-    title: "Hypothesis",
+    title: "Results",
     content: (
       <>
         <p>
-          If we simplified the workflow, reduced cognitive load, and strengthened
-          forward movement cues, we would:
+          The experiment ran on direct traffic only, with spam and
+          reporting-excluded accounts filtered out, leaving 3,565 accounts in
+          the analysis. It ran for 2.5 weeks and reached statistical significance
+          at week two. We rolled out to 100%.
         </p>
-        <ul className="list-disc pl-5 mt-3 space-y-1">
-          <li>Increase file upload completion</li>
-          <li>Increase contact volume per account</li>
-          <li>Improve downstream send behavior</li>
-        </ul>
-        <p className="mt-4">
-          The growth team formed the original hypothesis. I contributed to
-          shaping the UX direction and validating that our metric definitions
-          accurately reflected user behavior.
-        </p>
-      </>
-    ),
-  },
-  {
-    type: "section",
-    title: "My Role",
-    content: (
-      <ul className="list-disc pl-5 space-y-1">
-        <li>Design lead embedded within a dedicated growth pod</li>
-        <li>Partnered directly with 2 PMs and 4 engineers</li>
-        <li>Contributed to hypothesis refinement</li>
-        <li>Pressed on metric validation and statistical confidence</li>
-        <li>Led UX strategy and execution within the RISE design system</li>
-      </ul>
-    ),
-  },
-  {
-    type: "section",
-    title: "Design Strategy",
-    content: (
-      <>
-        <p>
-          Rather than redesigning the entire architecture, we focused on
-          friction reduction within the existing system.
-        </p>
-        <ul className="list-disc pl-5 mt-4 space-y-3">
-          <li>
-            <strong>Removed False Completion Signals</strong> &mdash; Replaced
-            the misleading checkmark with progressive disclosure language that
-            clearly indicated the next step.
-          </li>
-          <li>
-            <strong>Strengthened Forward Movement</strong> &mdash; Improved
-            visibility of primary actions after file upload to eliminate
-            ambiguity about what to do next.
-          </li>
-          <li>
-            <strong>Simplified Field Mapping</strong> &mdash; Reduced visual
-            noise and improved clarity of column mapping to lower cognitive
-            overhead.
-          </li>
-          <li>
-            <strong>Consolidated Help Resources</strong> &mdash; Removed
-            scattered documentation and embedded contextual guidance inline.
-          </li>
-          <li>
-            <strong>Converted Consent to Inline Modal</strong> &mdash; Reduced
-            flow interruption by handling consent within context rather than as a
-            blocking step.
-          </li>
-        </ul>
-        <p className="mt-4">
-          We also improved error states to clearly explain failed uploads and
-          prevent silent friction.
-        </p>
-      </>
-    ),
-  },
-  {
-    type: "section",
-    title: "Experiment Design",
-    content: (
-      <>
-        <ul className="list-disc pl-5 space-y-1">
-          <li>Direct traffic only</li>
-          <li>Excluded spam and reporting-excluded accounts</li>
-          <li>3,565 accounts analyzed</li>
-          <li>Experiment ran 2.5 weeks</li>
-          <li>Statistical significance reached around week 2</li>
-        </ul>
-        <p className="mt-4">Primary KPIs:</p>
-        <ul className="list-disc pl-5 mt-2 space-y-1">
-          <li>% Accounts Using File Upload</li>
-          <li>Total Contacts Uploaded via File</li>
-          <li>Avg Contacts per Account</li>
-        </ul>
-        <p className="mt-3 text-[13px] text-muted">
-          All measured at the account level and attributed post-exposure.
+        <p className="mt-4 font-semibold">
+          Every primary metric moved in the right direction.
         </p>
       </>
     ),
@@ -218,6 +130,8 @@ const blocks: ContentBlock[] = [
     groups: [
       {
         title: "Results",
+        description:
+          "3,565 accounts, 2.5-week experiment, significance reached at week 2. Rolled out to 100%.",
         metrics: [
           { value: "+11.9%", label: "Accounts using file upload" },
           { value: "+8.6%", label: "Total contacts uploaded" },
@@ -228,18 +142,24 @@ const blocks: ContentBlock[] = [
   },
   {
     type: "section",
-    title: "Organizational Impact",
+    title: "Reflection",
     content: (
       <>
         <p>
-          This experiment reinforced a broader principle that lower cognitive
-          overhead improves completion in complex workflows. Historically, our
-          product tolerated heavier, more fragmented flows.
+          False completion signals are a specific category of UX problem worth
+          naming. They don&rsquo;t generate support tickets. Users don&rsquo;t
+          report them as bugs. They just leave — convinced they finished
+          something they didn&rsquo;t. That invisibility is what makes them
+          damaging. You can&rsquo;t see the exit in the data because it looks
+          like a successful session.
         </p>
         <p className="mt-4">
-          Following this experiment&rsquo;s success, we began adopting a more
-          intentional, friction-reduction lens across other areas of the product.
-          The roadmap adjusted accordingly once signal was confirmed.
+          After this experiment, the team started applying a friction-reduction
+          lens more deliberately across other complex workflows in the product.
+          The upload flow was a clear enough case that it became a useful
+          reference point — not because the changes were novel, but because the
+          results made the underlying principle legible to the broader
+          organization.
         </p>
       </>
     ),

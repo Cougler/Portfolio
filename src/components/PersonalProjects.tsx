@@ -15,6 +15,18 @@ const FigmaIcon = () => <IconImg src="/icons/FigmaMakeIcon.svg" alt="Figma Make"
 const SupabaseIcon = () => <IconImg src="/icons/SupabaseIcon.svg" alt="Supabase" />;
 const CursorIcon = () => <IconImg src="/icons/cursor.svg" alt="Cursor" />;
 const XCodeIcon = () => <IconImg src="/icons/xcode.svg" alt="Xcode" />;
+const ClaudeIcon = () => <IconImg src="/icons/claude.png" alt="Claude Code" />;
+
+const MissionControlLogo = () => (
+  <div className="w-10 h-10 rounded-lg bg-[#0d0d0f] border border-[#222226] flex items-center justify-center shrink-0">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <rect x="2" y="13" width="3" height="7" rx="0.5" fill="#6366f1" opacity="0.5" />
+      <rect x="7" y="9" width="3" height="11" rx="0.5" fill="#6366f1" opacity="0.7" />
+      <rect x="12" y="5" width="3" height="15" rx="0.5" fill="#6366f1" opacity="0.9" />
+      <rect x="17" y="2" width="3" height="18" rx="0.5" fill="#6366f1" />
+    </svg>
+  </div>
+);
 
 const FlowkiLogo = () => (
   <img src="/icons/FlowkiIcon.svg" alt="Flowki" width={40} height={40} className="rounded-lg shrink-0" />
@@ -36,6 +48,18 @@ const ExternalLinkIcon = () => (
     </svg>
   </div>
 );
+
+const missionControl: PersonalProject = {
+  title: "Mission Control",
+  description:
+    "A live ops dashboard that aggregates Claude Code session history, installed skills, and connected MCP servers into a single view. Built entirely with Claude Code to track everything I build with Claude Code.",
+  tags: [
+    { label: "Claude Code", icon: <ClaudeIcon /> },
+    { label: "Next.js", icon: <CursorIcon /> },
+  ],
+  icon: <MissionControlLogo />,
+  href: "https://mission-control-acportfolio.vercel.app",
+};
 
 const projects: PersonalProject[] = [
   {
@@ -73,7 +97,7 @@ const projects: PersonalProject[] = [
 function PersonalProjectCard({ project, compact = false }: { project: PersonalProject; compact?: boolean }) {
   return (
     <div
-      className={`border border-border p-5 flex flex-col h-full shadow-none ${compact ? "md:max-h-[380px]" : ""}`}
+      className="border border-border p-5 flex flex-col h-full shadow-none"
       style={{ borderRadius: "var(--theme-card-radius, 16px)" }}
     >
       <div className="flex items-start justify-between mb-4">
@@ -124,19 +148,22 @@ export default function PersonalProjects() {
       id="ai-section"
       className="max-w-[1300px] mx-auto px-5 md:px-10 pt-0 pb-16 md:pb-24"
     >
-      <h2 className="section-heading">
-        Personal Projects
-      </h2>
-      <p className="text-[14px] md:text-[15px] text-muted mb-6 md:mb-10 font-[family-name:var(--font-inter)]">
-        I create AI-powered tools to streamline my daily tasks.
-      </p>
+      <div className="mb-6 md:mb-10">
+        <span className="ai-section-eyebrow">Personal Projects</span>
+        <h2 className="ai-section-title">Things I build for myself.</h2>
+        <p className="ai-section-sub">AI-powered tools I made to streamline my own daily work.</p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-5">
-        <PersonalProjectCard project={projects[0]} />
-
-        <div className="flex flex-col gap-5 md:h-[780px]">
+      <div className="flex flex-col gap-5">
+        {/* Row 1: Long left (Mission Control), Short right (Pro UX Kit) */}
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-5">
+          <PersonalProjectCard project={missionControl} />
           <PersonalProjectCard project={projects[2]} compact />
+        </div>
+        {/* Row 2: Short left (DeskFit), Long right (Flowki) */}
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-5">
           <PersonalProjectCard project={projects[1]} compact />
+          <PersonalProjectCard project={projects[0]} />
         </div>
       </div>
     </section>

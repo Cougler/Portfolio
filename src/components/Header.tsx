@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-
 const aiLinks = [
   { label: "Data analysis", id: "ai-data" },
   { label: "Design ideation", id: "ai-design" },

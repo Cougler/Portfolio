@@ -226,7 +226,7 @@ export default function OrganizationAnimation({ isActive }: { isActive: boolean 
         isActive ? "org-visible" : ""
       }`}
     >
-      <div className="grid grid-cols-[auto_minmax(30px,1fr)_1fr] items-center gap-0 w-full max-w-[420px] h-[140px]">
+      <div className="grid grid-cols-[auto_minmax(20px,50px)_auto] items-center gap-0">
         {/* Left: Jira + Cursor stacked */}
         <div className="flex flex-col gap-1.5 w-[100px] md:w-[110px] z-10">
           <MiniJiraWindow />
@@ -234,12 +234,12 @@ export default function OrganizationAnimation({ isActive }: { isActive: boolean 
         </div>
 
         {/* Middle: flow lines */}
-        <div className="h-full">
+        <div className="h-[140px]">
           <FlowLines isActive={isActive} />
         </div>
 
         {/* Right: dashboard draws in */}
-        <div className="h-full z-10">
+        <div className="h-[140px] w-[110px] md:w-[130px] z-10">
           <DashboardPanel />
         </div>
       </div>

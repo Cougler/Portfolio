@@ -15,114 +15,132 @@ const tools = ["Figma", "Notion", "Jira", "User Testing"];
 const blocks: ContentBlock[] = [
   {
     type: "section",
-    title: "Making Branding Feel Effortless",
+    title: "Overview",
     content: (
       <>
         <p>
-          Small businesses want their marketing to look professional, but most
-          don&rsquo;t have the time or tools to set up logos, fonts, and colors
-          from scratch. BrandKit was built to change that &mdash; turning what
-          used to feel like a design chore into a one-click confidence boost.
+          Small businesses want professional marketing, but setting up logos,
+          fonts, and colors from scratch is friction most don&rsquo;t have time
+          for. BrandKit removes that barrier. Users enter a website URL or
+          upload a logo, and the system extracts their brand elements and applies
+          them across email templates and landing pages automatically.
         </p>
         <p className="mt-4">
-          Users can upload a logo or simply enter their website. From there,
-          BrandKit extracts key brand elements and applies them across email
-          templates and landing pages &mdash; so users start with a system that
-          already feels like them.
+          The project started as a quick-turn utility scoped to logo and color
+          import. Early usability sessions revealed users expected full brand
+          consistency across everything they created — fonts, imagery, tone. That
+          finding shifted BrandKit from a simple utility to something more
+          foundational in the product.
         </p>
-        <div className="mt-6 grid grid-cols-1 gap-2" style={{ maxWidth: "200px" }}>
-          <div
-            className="flex flex-col gap-0.5 p-3 bg-[#f8f9fa] border border-border/50"
-            style={{ borderRadius: "var(--theme-card-radius, 12px)" }}
-          >
-            <span className="text-[1rem] md:text-[1.1rem] font-bold tracking-tight text-accent font-[family-name:var(--font-inter)]">
-              +21%
-            </span>
-            <span className="text-[11px] md:text-[12px] text-muted leading-snug font-[family-name:var(--font-inter)]">
-              Trial-to-paid conversion
-            </span>
-          </div>
+        <div className="mt-6 grid grid-cols-2 gap-2">
+          {[
+            { value: "+21%", label: "Trial-to-paid conversion" },
+            { value: "400K+", label: "Users" },
+          ].map((m) => (
+            <div
+              key={m.label}
+              className="flex flex-col gap-0.5 p-3 bg-[#f8f9fa] border border-border/50"
+              style={{ borderRadius: "var(--theme-card-radius, 12px)" }}
+            >
+              <span className="text-[1rem] md:text-[1.1rem] font-bold tracking-tight text-accent font-[family-name:var(--font-inter)]">
+                {m.value}
+              </span>
+              <span className="text-[11px] md:text-[12px] text-muted leading-snug font-[family-name:var(--font-inter)]">
+                {m.label}
+              </span>
+            </div>
+          ))}
         </div>
       </>
     ),
   },
   {
     type: "section",
-    title: "Starting Simple",
+    title: "The Problem",
     content: (
       <>
         <p>
-          BrandKit began as a quick-turn project intended to let users add a
-          logo and a few brand colors to their emails and landing pages. The
-          initial scope was small and meant to fill a clear gap &mdash; users
-          wanted their content to &ldquo;look like them&rdquo; without having to
-          customize every template.
+          Most small business owners are not designers. They can describe their
+          brand — the colors they use, the feel they want — but translating that
+          into a consistent visual system across every email and landing page
+          they create is a different skill. The result was campaigns that looked
+          generic, or users spending time on manual customization that should
+          have been automatic.
         </p>
         <p className="mt-4">
-          But early usability sessions quickly changed the conversation. Users
-          didn&rsquo;t just want logos and colors. They wanted the whole brand
-          &mdash; fonts, imagery, and even tone &mdash; to be consistent across
-          everything they made. That feedback shifted BrandKit from a simple
-          utility into a potential cornerstone of the Constant Contact
-          experience.
+          The existing product had no mechanism for capturing and applying brand
+          identity at scale. Every new template started from zero. BrandKit was
+          built to solve that: scan once, apply everywhere.
         </p>
       </>
     ),
   },
   {
     type: "section",
-    title: "The Tension Between 'Fast' and 'Right'",
+    title: "Scope Under Pressure",
     content: (
       <>
         <p>
-          Product management pushed for speed to capture early engagement, while
-          design saw an opportunity to build something foundational and sticky.
-          The compromise was to narrow scope but raise execution quality.
+          PM pushed for speed — get something in front of users early to capture
+          engagement before they dropped off during onboarding. Design saw a
+          different opportunity: if we built this right, BrandKit could become
+          the foundation every other feature in the product builds on top of.
         </p>
         <p className="mt-4">
-          We removed the font-scraping functionality from the first release to
-          simplify development and reduce risk. But we kept the focus on what
-          mattered most: automatically pulling logos, colors, and imagery from a
-          user&rsquo;s website to help them build consistent, professional
-          campaigns with minimal effort.
+          The compromise was to narrow scope without lowering execution quality.
+          Font scraping was cut from v1 — it added engineering complexity and
+          edge cases that would have slowed the release. What shipped instead was
+          a focused, high-quality experience: logo extraction, color import, and
+          intelligent application across templates. Doing fewer things well was
+          the right call.
         </p>
       </>
     ),
   },
   {
     type: "section",
-    title: "The Core Challenge: Mapping Colors Without Losing Users",
+    title: "The Color Mapping Challenge",
     content: (
       <>
         <p>
-          The hardest part of the project wasn&rsquo;t scanning the website
-          &mdash; it was what came after. Once the system extracted colors, we
-          needed to map them intelligently to different areas of templates. Done
-          wrong, it could make users feel trapped in a mismatched design, forcing
-          them to fix colors manually and breaking flow.
+          Scanning the website was straightforward. What came after was the real
+          design problem. Once colors were extracted, they had to be mapped
+          intelligently to different areas of a template — backgrounds, accents,
+          text. Done wrong, users would feel trapped in a mismatched design and
+          lose confidence in the whole feature.
         </p>
         <p className="mt-4">
-          We tested multiple approaches to automatic color assignment. Early
-          language models and mapping systems showed promise, but it was too
-          early to train a model, and our current mapping structure was
-          cumbersome for a light flow. Some overfit to brand palettes and failed
-          when colors lacked contrast. Others worked technically but
-          didn&rsquo;t look good in real content.
+          We tested multiple auto-mapping approaches. Some overfit to brand
+          palettes and failed when colors lacked sufficient contrast. Others were
+          technically correct but looked bad in real content — valid mappings
+          that produced ugly results. Neither extreme worked.
         </p>
-        <p className="mt-4">Ultimately, we developed a hybrid approach:</p>
-        <ul className="list-disc pl-5 mt-3 space-y-1">
-          <li>
-            The system automatically mapped the most reliable colors to key
-            template areas like backgrounds and accents.
-          </li>
-          <li>
-            For ambiguous mappings, users received a simple interface they could
-            use to adjust their palette manually afterwards.
-          </li>
-        </ul>
         <p className="mt-4">
-          This balance gave users a strong starting point without removing
-          control, and it prevented the feature from feeling unpredictable.
+          The solution was a hybrid model. The system auto-maps the most reliable
+          colors to high-confidence template areas — backgrounds and primary
+          accents — where the logic holds across a wide range of brand palettes.
+          For ambiguous mappings, users get a simple adjustment interface they
+          can use after the initial import. This gives users a strong, usable
+          starting point without locking them in. The automation creates momentum;
+          the adjustment layer preserves control.
+        </p>
+      </>
+    ),
+  },
+  {
+    type: "section",
+    title: "Results",
+    content: (
+      <>
+        <p>
+          Impact was measured against a control cohort during a staged rollout.
+          The primary metric was trial-to-paid conversion rate, tracked over a
+          60-day window. BrandKit was the only material change introduced during
+          the test period, which gave us confidence in attribution.
+        </p>
+        <p className="mt-4 font-semibold">
+          BrandKit drove a 21% lift in trial-to-paid conversion and is now
+          active across 400,000+ users.
         </p>
       </>
     ),
@@ -131,72 +149,59 @@ const blocks: ContentBlock[] = [
     type: "metrics",
     groups: [
       {
-        title: "Impact Was Measurable",
+        title: "Results",
         description:
-          "BrandKit shipped as a focused but flexible experience. Users could scan their website, import logos and imagery, and see their branding applied instantly across email and page templates.",
+          "Measured against a control cohort over a 60-day window. BrandKit was the only material product change during the test period.",
         metrics: [
-          { value: "21%", label: "Lift in trial-to-paid conversions" },
+          { value: "+21%", label: "Trial-to-paid conversion" },
+          { value: "400K+", label: "Users on the feature" },
         ],
       },
     ],
   },
   {
     type: "section",
-    title: "User Feedback",
-    content: (
-      <div className="space-y-3">
-        <blockquote className="border-l-2 border-accent/40 pl-4 italic text-foreground">
-          &ldquo;It pulled most of my colors perfectly.&rdquo;
-        </blockquote>
-        <blockquote className="border-l-2 border-accent/40 pl-4 italic text-foreground">
-          &ldquo;It felt like I had a designer helping me.&rdquo;
-        </blockquote>
-        <blockquote className="border-l-2 border-accent/40 pl-4 italic text-foreground">
-          &ldquo;I actually feel like my emails represent my business.&rdquo;
-        </blockquote>
-        <p className="mt-4">
-          The lesson: automation is most successful when it feels personal.
-        </p>
-      </div>
-    ),
-  },
-  {
-    type: "section",
-    title: "What I Learned",
+    title: "Reflection",
     content: (
       <>
         <p>
-          This project taught me that speed and quality don&rsquo;t have to
-          compete &mdash; but they do have to be negotiated. Building BrandKit
-          was an exercise in balancing immediate product goals with long-term
-          design value.
+          Cutting font scraping from v1 was the right decision, but it was a
+          real tradeoff. Users who expected full brand consistency — the thing
+          usability sessions told us they wanted — got most of it, not all of it.
+          Fonts are still manual. That gap is visible, and it matters.
         </p>
         <p className="mt-4">
-          We shipped on time, delivered real impact, and set the foundation for a
-          feature that can keep growing. More importantly, it proved that
-          automation succeeds when it gives users momentum without taking away
-          control.
+          The color mapping system works well on typical brand palettes, but it
+          has limits. Brands with low-contrast colors, or palettes built around
+          neutrals, still produce mappings that need adjustment. The hybrid
+          approach absorbs most of that friction, but it doesn&rsquo;t eliminate
+          it. Shipping something that works for 90% of users while knowing the
+          other 10% will need to fix things manually is a calculated risk — one
+          the conversion data suggests was worth taking, but a risk nonetheless.
         </p>
       </>
     ),
   },
   {
     type: "section",
-    title: "What Still Needs Work",
+    title: "What's Next",
     content: (
       <>
         <p>
-          There are still a few edge cases where the brand scanner doesn&rsquo;t
-          perform as expected. These are being tracked and prioritized based on
-          frequency as support requests come in. One consistent issue involves
-          SVG logos, which the scanner currently can&rsquo;t process. When that
-          happens, the system defaults to using the first image it successfully
-          detects as the logo.
+          Engineering is building an SVG-to-image converter to address the most
+          common logo import failure. Currently, when the scanner encounters an
+          SVG logo it cannot process, it falls back to the first detected image
+          on the page — which is often wrong. The converter will eliminate that
+          fallback path entirely.
         </p>
         <p className="mt-4">
-          Engineering is developing a converter that automatically generates
-          image files from SVGs to prevent users from having to update assets
-          manually.
+          Font scraping is the logical next addition to the v1 scope that was
+          cut. The infrastructure for brand storage is already in place; pulling
+          in detected typefaces and applying them across templates is a contained
+          problem now that the core system is stable. Beyond that, BrandKit has
+          a real opportunity to become the system-of-record for brand identity
+          across the entire product — applied automatically whenever a user
+          creates something new.
         </p>
       </>
     ),
