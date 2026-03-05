@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
 
@@ -167,13 +166,9 @@ export default function AboutContent() {
       {/* Header */}
       <header className="max-w-[1200px] mx-auto flex items-center justify-between px-6 md:px-10 py-8">
         <Link href="/" aria-label="Home">
-          <Image
-            src="/images/logo.svg"
-            alt="Aaron Cougle logo"
-            width={40}
-            height={30}
-            priority
-          />
+          <svg width="32" height="24" viewBox="0 0 247 185" fill="none">
+            <path d="M123.299 0C129.935 0 136.158 3.20873 140.015 8.60897L242.761 152.453C247.235 158.717 247.848 166.961 244.326 173.805C240.803 180.647 233.741 184.942 226.045 184.942H143.848C137.605 184.942 131.694 182.111 127.794 177.236L123.299 171.617L118.804 177.236C114.904 182.111 108.992 184.942 102.75 184.942H20.553C12.8567 184.942 5.79424 180.647 2.27153 173.805C-1.25068 166.961 -0.637256 158.717 3.8368 152.453L106.583 8.60897L108.128 6.68249C111.995 2.45113 117.492 0 123.299 0ZM20.553 164.393H102.75L123.299 138.707L143.848 164.393H226.045L123.299 20.5491L20.553 164.393Z" fill="currentColor" />
+          </svg>
         </Link>
         <div className="flex items-center gap-3">
           <Link

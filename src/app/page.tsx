@@ -56,7 +56,6 @@ function glassCard(hover = false): React.CSSProperties {
     background: hover ? SURF_HV : SURF,
     border: `1px solid ${hover ? BORDER_HV : BORDER}`,
     borderRadius: 16,
-    boxShadow: "var(--v2-card-shadow)",
     backdropFilter: "blur(16px)",
     transition: "background 0.2s, border-color 0.2s",
   };
@@ -110,7 +109,7 @@ function TimelineDashes({ className }: { className?: string }) {
 // ─── Logo ─────────────────────────────────────────────────────────────────────
 function Logo() {
   return (
-    <svg width="22" height="17" viewBox="0 0 247 185" fill="none">
+    <svg width="32" height="24" viewBox="0 0 247 185" fill="none">
       <path d="M123.299 0C129.935 0 136.158 3.20873 140.015 8.60897L242.761 152.453C247.235 158.717 247.848 166.961 244.326 173.805C240.803 180.647 233.741 184.942 226.045 184.942H143.848C137.605 184.942 131.694 182.111 127.794 177.236L123.299 171.617L118.804 177.236C114.904 182.111 108.992 184.942 102.75 184.942H20.553C12.8567 184.942 5.79424 180.647 2.27153 173.805C-1.25068 166.961 -0.637256 158.717 3.8368 152.453L106.583 8.60897L108.128 6.68249C111.995 2.45113 117.492 0 123.299 0ZM20.553 164.393H102.75L123.299 138.707L143.848 164.393H226.045L123.299 20.5491L20.553 164.393Z" fill={TEXT} />
     </svg>
   );
@@ -204,7 +203,7 @@ function Hero() {
         className="text-[15px] md:text-[17px] leading-relaxed w-full max-w-[520px]"
         style={{ color: MUTED }}
       >
-        Senior designer running activation growth experiments at Constant Contact. Here&rsquo;s what&rsquo;s shipped.
+        I'm a designer leading activation growth experiments at Constant Contact. Here are some noteworthy projects.
       </p>
     </section>
   );
@@ -250,7 +249,7 @@ function ProjectCard({ p }: { p: ProjectData }) {
       >
         {/* Title row */}
         <div className="flex items-center justify-between gap-4 md:gap-6 mb-3 md:mb-4">
-          <h3 className="text-[16px] font-bold tracking-[-0.02em]" style={{ color: "rgba(240,240,240,0.45)" }}>{p.title}</h3>
+          <h3 className="text-[16px] font-bold tracking-[-0.02em]" style={{ color: MUTED }}>{p.title}</h3>
           {p.comingSoon ? (
             <span className="inline-flex items-center gap-1.5 text-[12px] font-medium whitespace-nowrap" style={{ color: MUTED }}>
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -282,7 +281,7 @@ function ProjectCard({ p }: { p: ProjectData }) {
               }}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M3 11L11 3M11 3H5.5M11 3V8.5" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M3 11L11 3M11 3H5.5M11 3V8.5" stroke={MUTED} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           ) : null}
@@ -330,7 +329,7 @@ function ProjectCard({ p }: { p: ProjectData }) {
           ))}
         </div>
 
-        <p className="text-[13.5px] leading-relaxed max-w-[520px]" style={{ color: "rgba(240,240,240,0.6)" }}>{p.description}</p>
+        <p className="text-[13.5px] leading-relaxed max-w-[520px]" style={{ color: MUTED }}>{p.description}</p>
       </div>
     </div>
   );
@@ -388,7 +387,7 @@ function AIFeaturedCard({ card, isActive }: { card: AICardData; isActive: boolea
           ))}
         </div>
       </div>
-      <div className="flex-1 min-h-[220px] flex items-center justify-center overflow-hidden"
+      <div className="flex-1 min-h-[220px] md:min-h-[360px] flex items-center justify-center overflow-hidden"
         style={{ borderLeft: `1px solid ${BORDER}` }}>
         {Preview && <Preview isActive={isActive} />}
       </div>

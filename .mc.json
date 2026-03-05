@@ -2,5 +2,5 @@
   "description": "Personal portfolio website",
   "status": "active",
   "stack": ["Next.js", "TypeScript", "Tailwind CSS"],
-  "notes": "The portfolio homepage is fully redesigned with a dark-first glass UI — self-contained in page.tsx with CSS variable-based theming and a working dark/light toggle in the nav. Project cards now use glass containers that hug content, with timeline dashes extending on the bare background. Next: refine light mode styling and consider adding the about page to the new design system."
+  "notes": "Dark/light mode now persists via localStorage across all project pages, the about page, and the homepage — with glass card effects throughout. Current session: updating homepage UI polish including subheading copy, fixing light mode color bugs on project cards (arrow, title, description), removing card shadows, enlarging the nav logo, updating the favicon, and reworking the Prototyping in Production animation connections to use an angular fork routing. Not yet deployed."
 }

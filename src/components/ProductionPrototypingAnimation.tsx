@@ -155,7 +155,7 @@ function GitHubPanel() {
 function BrowserPanel({ isActive }: { isActive: boolean }) {
   const play = isActive ? "running" : "paused";
   return (
-    <div className="flex flex-col rounded-lg border border-[#e2e8f0] bg-white shadow-sm overflow-hidden w-[160px] md:w-[180px] shrink-0">
+    <div className="relative z-10 flex flex-col rounded-lg border border-[#e2e8f0] bg-white shadow-sm overflow-hidden w-[160px] md:w-[180px] shrink-0">
       {/* Chrome */}
       <div className="flex items-center gap-1 px-2 py-1.5 bg-[#f8fafc] border-b border-[#e2e8f0]">
         <span className="w-[5px] h-[5px] rounded-full bg-[#ff5f57]" />
@@ -227,6 +227,16 @@ function BrowserPanel({ isActive }: { isActive: boolean }) {
 }
 
 function Connection({ isActive }: { isActive: boolean }) {
+  // Each arm: short horizontal stub from card → turn toward center → shared vertical → trunk to browser
+  const jx = 164; // x of shared vertical
+  const jy = 100; // y of junction (midpoint between two cards)
+  const bx = 318; // x of browser left edge
+  const gy = 62;  // y center of GitHub panel
+  const cy = 138; // y center of CLI panel
+
+  const githubFull = `M 144 ${gy} L ${jx} ${gy} L ${jx} ${jy} L ${bx} ${jy}`;
+  const cliFull    = `M 144 ${cy} L ${jx} ${cy} L ${jx} ${jy} L ${bx} ${jy}`;
+
   return (
     <svg
       className="absolute inset-0 w-full h-full pointer-events-none"
@@ -236,23 +246,35 @@ function Connection({ isActive }: { isActive: boolean }) {
     >
       <defs>
         <linearGradient id="pp-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.5" />
-          <stop offset="100%" stopColor="#818cf8" stopOpacity="0.2" />
+          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.6" />
+          <stop offset="100%" stopColor="#818cf8" stopOpacity="0.25" />
         </linearGradient>
       </defs>
-      <path d="M 80 90 C 140 90, 260 90, 320 90" stroke="url(#pp-grad)" strokeWidth="1.5" strokeDasharray="4 5" className="animate-dash" />
-      <path d="M 80 110 C 140 110, 260 110, 320 110" stroke="url(#pp-grad)" strokeWidth="1" strokeDasharray="3 6" className="animate-dash-slow" />
+
+      {/* GitHub arm: right → down to junction */}
+      <path d={`M 144 ${gy} L ${jx} ${gy} L ${jx} ${jy}`} stroke="url(#pp-grad)" strokeWidth="1.5" strokeDasharray="4 5" className="animate-dash" />
+      {/* CLI arm: right → up to junction */}
+      <path d={`M 144 ${cy} L ${jx} ${cy} L ${jx} ${jy}`} stroke="url(#pp-grad)" strokeWidth="1.5" strokeDasharray="4 5" className="animate-dash-slow" />
+      {/* Shared trunk to browser */}
+      <path d={`M ${jx} ${jy} L ${bx} ${jy}`} stroke="url(#pp-grad)" strokeWidth="1.5" strokeDasharray="4 5" className="animate-dash" />
+
+      {/* Static port dots at card exit points */}
+      <circle cx="144" cy={gy} r="3.5" fill="#6366f1" opacity="0.75" />
+      <circle cx="144" cy={cy} r="3.5" fill="#6366f1" opacity="0.75" />
 
       {isActive && (
         <>
-          <circle r="2.5" fill="#6366f1" opacity="0.85">
-            <animateMotion dur="2.2s" repeatCount="indefinite" path="M 80 90 C 140 90, 260 90, 320 90" />
+          <circle r="2.5" fill="#6366f1" opacity="0.9">
+            <animateMotion dur="2s" repeatCount="indefinite" path={githubFull} />
           </circle>
-          <circle r="1.8" fill="#818cf8" opacity="0.6">
-            <animateMotion dur="2.2s" repeatCount="indefinite" begin="1.1s" path="M 80 90 C 140 90, 260 90, 320 90" />
+          <circle r="1.8" fill="#818cf8" opacity="0.65">
+            <animateMotion dur="2s" repeatCount="indefinite" begin="1s" path={githubFull} />
           </circle>
-          <circle r="1.8" fill="#6366f1" opacity="0.7">
-            <animateMotion dur="3s" repeatCount="indefinite" begin="0.6s" path="M 80 110 C 140 110, 260 110, 320 110" />
+          <circle r="2.5" fill="#6366f1" opacity="0.9">
+            <animateMotion dur="2.4s" repeatCount="indefinite" begin="0.4s" path={cliFull} />
+          </circle>
+          <circle r="1.8" fill="#818cf8" opacity="0.65">
+            <animateMotion dur="2.4s" repeatCount="indefinite" begin="1.6s" path={cliFull} />
           </circle>
         </>
       )}
@@ -264,7 +286,7 @@ export default function ProductionPrototypingAnimation({ isActive }: { isActive:
   return (
     <div className="relative w-full h-full flex items-center justify-center px-3 py-5">
       <style>{styles}</style>
-      <div className="relative flex items-center justify-between w-full max-w-[320px]">
+      <div className="relative flex items-center justify-between w-full max-w-[320px] md:scale-[1.5]">
         <div className="flex flex-col gap-2 shrink-0">
           <GitHubPanel />
           <CliPanel isActive={isActive} />
