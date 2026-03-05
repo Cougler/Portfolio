@@ -164,26 +164,19 @@ export default function AboutContent() {
       }}
     >
       {/* Header */}
-      <header className="max-w-[1200px] mx-auto flex items-center justify-between px-6 md:px-10 py-8">
-        <Link href="/" aria-label="Home">
-          <svg width="32" height="24" viewBox="0 0 247 185" fill="none">
-            <path d="M123.299 0C129.935 0 136.158 3.20873 140.015 8.60897L242.761 152.453C247.235 158.717 247.848 166.961 244.326 173.805C240.803 180.647 233.741 184.942 226.045 184.942H143.848C137.605 184.942 131.694 182.111 127.794 177.236L123.299 171.617L118.804 177.236C114.904 182.111 108.992 184.942 102.75 184.942H20.553C12.8567 184.942 5.79424 180.647 2.27153 173.805C-1.25068 166.961 -0.637256 158.717 3.8368 152.453L106.583 8.60897L108.128 6.68249C111.995 2.45113 117.492 0 123.299 0ZM20.553 164.393H102.75L123.299 138.707L143.848 164.393H226.045L123.299 20.5491L20.553 164.393Z" fill="currentColor" />
+      <div className="max-w-[760px] mx-auto px-6 md:px-10 pt-[max(1.5rem,env(safe-area-inset-top))] animate-fade-in-up flex items-center justify-between">
+        <Link
+          href="/"
+          aria-label="Back to home"
+          className="inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-150"
+          style={{ border: "1px solid var(--v2-border)", color: "var(--v2-muted)" }}
+        >
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+            <path d="M10 13l-5-5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </Link>
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-[13px] font-medium transition-colors duration-150 font-[family-name:var(--font-inter)]"
-            style={{ color: "var(--v2-muted)" }}
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M10 13l-5-5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Back to home
-          </Link>
-          <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
-        </div>
-      </header>
+        <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+      </div>
 
       {/* Hero */}
       <section className="max-w-[760px] mx-auto px-6 md:px-10 pt-8 pb-6 animate-fade-in-up">
