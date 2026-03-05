@@ -28,6 +28,7 @@ const darkVars: React.CSSProperties = {
   "--v2-muted":       "#6B6F76",
   "--v2-dash":        "rgba(255,255,255,0.15)",
   "--v2-card-shadow": "inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.4)",
+  "--color-accent":   "#8B96E9",
 } as React.CSSProperties;
 
 const lightVars: React.CSSProperties = {
@@ -41,6 +42,7 @@ const lightVars: React.CSSProperties = {
   "--v2-muted":       "#6b7280",
   "--v2-dash":        "rgba(0,0,0,0.15)",
   "--v2-card-shadow": "0 2px 16px rgba(0,0,0,0.07)",
+  "--color-accent":   "#4f46e5",
 } as React.CSSProperties;
 
 const accentBg: Record<string, string> = {
@@ -69,7 +71,7 @@ function useHover() {
 function highlightMetrics(text: string) {
   return text.split(/(\+[\d.]+%|\d+x|\d+%)/g).map((part, i) =>
     /^\+?[\d.]+(%|x)$/.test(part)
-      ? <span key={i} style={{ color: "#8B96E9", fontWeight: 700 }}>{part}</span>
+      ? <span key={i} style={{ color: "var(--color-accent)", fontWeight: 700 }}>{part}</span>
       : part
   );
 }
@@ -383,7 +385,7 @@ function AIFeaturedCard({ card, isActive }: { card: AICardData; isActive: boolea
         <div className="flex flex-wrap gap-1.5 mt-auto">
           {card.tags.map(tag => (
             <span key={tag} className="text-[10px] px-2.5 py-1 rounded-full font-medium"
-              style={{ background: "rgba(255,255,255,0.05)", border: `1px solid ${BORDER}`, color: MUTED }}>{tag}</span>
+              style={{ background: SURF, border: `1px solid ${BORDER}`, color: MUTED }}>{tag}</span>
           ))}
         </div>
       </div>
@@ -407,7 +409,7 @@ function AICard({ card, isActive }: { card: AICardData; isActive: boolean }) {
         <div className="flex flex-wrap gap-1.5">
           {card.tags.map(tag => (
             <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full"
-              style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${BORDER}`, color: MUTED }}>{tag}</span>
+              style={{ background: SURF, border: `1px solid ${BORDER}`, color: MUTED }}>{tag}</span>
           ))}
         </div>
       </div>
@@ -490,7 +492,7 @@ function PersonalProjectCard({ project }: { project: PersonalProjectData }) {
       <div className="flex flex-wrap gap-1.5">
         {project.tags.map(tag => (
           <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full"
-            style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${BORDER}`, color: MUTED }}>{tag}</span>
+            style={{ background: SURF, border: `1px solid ${BORDER}`, color: MUTED }}>{tag}</span>
         ))}
       </div>
     </div>

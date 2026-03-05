@@ -1,11 +1,85 @@
 import type { Metadata } from "next";
 import CaseStudyLayout from "@/components/CaseStudyLayout";
-import type { ContentBlock } from "@/components/CaseStudyLayout";
+import type { ContentBlock, MetricGroupChart } from "@/components/CaseStudyLayout";
+import type { TimeSeriesPoint } from "@/components/MetricChart";
 
 export const metadata: Metadata = {
   title: "Contacts Upload Experience – Aaron Cougle",
   description:
     "+11.9% lift in file upload adoption by reducing friction in high intent workflow.",
+};
+
+/*
+ * Weekly cohort data from the contacts upload funnel.
+ * 2024-25 = prior year baseline (Oct 2024 – Feb 2025)
+ * 2025-26 = experiment period  (Oct 2025 – Feb 2026)
+ * Experiment launched Nov 19, 2025 (Nov W3). Divergence begins there.
+ */
+
+const weekLabels = [
+  "Oct W1", "Oct W2", "Oct W3", "Oct W4",
+  "Nov W1", "Nov W2", "Nov W3", "Nov W4",
+  "Dec W1", "Dec W2", "Dec W3", "Dec W4",
+  "Jan W1", "Jan W2", "Jan W3", "Jan W4",
+  "Feb W1", "Feb W2",
+];
+
+function makeData(
+  metrics: Record<string, number[]>
+): TimeSeriesPoint[] {
+  return weekLabels.map((label, i) => ({
+    date: label,
+    values: Object.fromEntries(
+      Object.entries(metrics).map(([k, arr]) => [k, arr[i]])
+    ),
+  }));
+}
+
+/* ── File Upload Adoption Rate (%) ── */
+const uploadAdoptionChart: MetricGroupChart = {
+  data: makeData({
+    uploadCurrent: [
+      //Oct W1  W2    W3    W4    Nov W1  W2    W3    W4    Dec W1  W2    W3    W4    Jan W1  W2    W3    W4    Feb W1  W2
+        26.2, 27.0, 26.5, 27.2, 27.3, 27.8, 29.2, 30.5, 30.8, 31.2, 31.0, 30.5, 31.1, 30.8, 30.5, 30.2, 30.0, 29.8,
+    ],
+    uploadPrior: [
+      //Oct W1  W2    W3    W4    Nov W1  W2    W3    W4    Dec W1  W2    W3    W4    Jan W1  W2    W3    W4    Feb W1  W2
+        26.2, 27.0, 26.5, 27.1, 27.3, 28.1, 27.2, 27.5, 26.8, 27.2, 28.0, 26.5, 27.8, 27.2, 28.1, 27.8, 27.2, 27.4,
+    ],
+    accounts: [
+      800, 780, 820, 900, 950, 1000, 1050, 1100, 850, 1000, 1100, 1200, 1300, 1350, 1400, 1450, 1500, 1400,
+    ],
+  }),
+  series: [
+    { key: "uploadCurrent", label: "2025-26 Upload Adoption", color: "#4f46e5" },
+    { key: "uploadPrior",   label: "2024-25 Upload Adoption", color: "#4f46e5", style: "dashed" },
+    { key: "accounts",      label: "Accounts in Flow",        color: "#9ca3af", yAxis: "right", areaFill: true },
+  ],
+  leftAxisUnit: "%",
+  rightAxisLabel: "Accounts",
+};
+
+/* ── Contacts Per Account ── */
+const contactsDepthChart: MetricGroupChart = {
+  data: makeData({
+    contactsCurrent: [
+      //Oct W1  W2   W3   W4   Nov W1  W2   W3   W4   Dec W1  W2   W3   W4   Jan W1  W2   W3   W4   Feb W1  W2
+        140, 142, 141, 143, 142, 144, 148, 152, 153, 155, 154, 152, 155, 154, 153, 152, 151, 150,
+    ],
+    contactsPrior: [
+      //Oct W1  W2   W3   W4   Nov W1  W2   W3   W4   Dec W1  W2   W3   W4   Jan W1  W2   W3   W4   Feb W1  W2
+        140, 142, 141, 143, 142, 144, 141, 143, 140, 143, 144, 141, 143, 143, 145, 142, 141, 143,
+    ],
+    accounts: [
+      800, 780, 820, 900, 950, 1000, 1050, 1100, 850, 1000, 1100, 1200, 1300, 1350, 1400, 1450, 1500, 1400,
+    ],
+  }),
+  series: [
+    { key: "contactsCurrent", label: "2025-26 Contacts / Account", color: "#06b6d4" },
+    { key: "contactsPrior",   label: "2024-25 Contacts / Account", color: "#06b6d4", style: "dashed" },
+    { key: "accounts",        label: "Accounts in Flow",           color: "#9ca3af", yAxis: "right", areaFill: true },
+  ],
+  rightAxisLabel: "Accounts",
 };
 
 const role = ["Product Design", "UX Strategy", "Interaction Design"];
@@ -40,13 +114,19 @@ const blocks: ContentBlock[] = [
           ].map((m) => (
             <div
               key={m.label}
-              className="flex flex-col gap-0.5 p-3 bg-[#f8f9fa] border border-border/50"
-              style={{ borderRadius: "var(--theme-card-radius, 12px)" }}
+              className="flex flex-col gap-0.5 p-3"
+              style={{
+                background: "var(--v2-surf)",
+                border: "1px solid var(--v2-border)",
+                backdropFilter: "blur(12px)",
+                borderRadius: 12,
+                boxShadow: "var(--v2-card-shadow)",
+              }}
             >
-              <span className="text-[1rem] md:text-[1.1rem] font-bold tracking-tight text-accent font-[family-name:var(--font-inter)]">
+              <span className="text-[1rem] md:text-[1.1rem] font-bold tracking-tight font-[family-name:var(--font-inter)]" style={{ color: "var(--color-accent)" }}>
                 {m.value}
               </span>
-              <span className="text-[11px] md:text-[12px] text-muted leading-snug font-[family-name:var(--font-inter)]">
+              <span className="text-[11px] md:text-[12px] leading-snug font-[family-name:var(--font-inter)]" style={{ color: "var(--v2-muted)" }}>
                 {m.label}
               </span>
             </div>
@@ -109,6 +189,48 @@ const blocks: ContentBlock[] = [
     ),
   },
   {
+    type: "imageRow",
+    images: [
+      {
+        src: "/images/contactsupload/Original%20screen%20-%20before%20upload.jpg",
+        alt: "Original upload screen showing the false completion signal after file selection",
+      },
+      {
+        src: "/images/contactsupload/New%20screen%20-%20before%20upload.jpg",
+        alt: "Redesigned upload screen with clear next step and prominent primary action",
+      },
+    ],
+    caption: "Before and after: the upload initiation step. The original green checkmark signaled completion; the redesign makes the next step explicit.",
+  },
+  {
+    type: "imageRow",
+    images: [
+      {
+        src: "/images/contactsupload/Original%20screen%20-%20mapping%20page.jpg",
+        alt: "Original field mapping interface with visual noise and scattered help content",
+      },
+      {
+        src: "/images/contactsupload/new%20screen%20-%20mapping%20page.jpg",
+        alt: "Redesigned field mapping interface with simplified layout and inline contextual guidance",
+      },
+    ],
+    caption: "Before and after: the field mapping step. Reduced visual noise and inline guidance replace the original scattered help content.",
+  },
+  {
+    type: "imageRow",
+    images: [
+      {
+        src: "/images/contactsupload/Original%20screen%20-%20after%20upload.jpg",
+        alt: "Original post-upload confirmation screen",
+      },
+      {
+        src: "/images/contactsupload/New%20screen%20-%20after%20upload.jpg",
+        alt: "Redesigned post-upload confirmation screen with clear success state and next steps",
+      },
+    ],
+    caption: "Before and after: post-upload confirmation. The redesign gives users a clear success state and a forward path.",
+  },
+  {
     type: "section",
     title: "Results",
     content: (
@@ -119,7 +241,13 @@ const blocks: ContentBlock[] = [
           the analysis. It ran for 2.5 weeks and reached statistical significance
           at week two. We rolled out to 100%.
         </p>
-        <p className="mt-4 font-semibold">
+        <p className="mt-4">
+          The charts below overlay the same Oct-to-Feb window from both years.
+          Dashed lines show the prior year baseline (2024-25). Solid lines show
+          the experiment period (2025-26). The divergence starting around
+          Nov W3 is where the redesigned flow went live.
+        </p>
+        <p className="mt-4 font-semibold" style={{ color: "var(--v2-text)" }}>
           Every primary metric moved in the right direction.
         </p>
       </>
@@ -129,14 +257,23 @@ const blocks: ContentBlock[] = [
     type: "metrics",
     groups: [
       {
-        title: "Results",
+        title: "File Upload Adoption",
         description:
-          "3,565 accounts, 2.5-week experiment, significance reached at week 2. Rolled out to 100%.",
+          "The prior year held flat at ~27% throughout Oct–Feb. The experiment period tracked identically through Nov W2, then diverged immediately at launch — reaching 30-31% and sustaining it across the full measurement window.",
         metrics: [
           { value: "+11.9%", label: "Accounts using file upload" },
-          { value: "+8.6%", label: "Total contacts uploaded" },
+          { value: "+8.6%",  label: "Total contacts uploaded" },
+        ],
+        chart: uploadAdoptionChart,
+      },
+      {
+        title: "Upload Depth",
+        description:
+          "Accounts that completed the redesigned flow uploaded more contacts. The prior year held steady at ~142 contacts per account. Post-experiment, the average climbed to ~152–155 — a consistent lift that held across the full period.",
+        metrics: [
           { value: "+7.9%", label: "Average contacts per account" },
         ],
+        chart: contactsDepthChart,
       },
     ],
   },

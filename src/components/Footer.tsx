@@ -25,7 +25,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-2">
               {workLinks.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:opacity-100 opacity-60 hover:text-foreground" style={{ color: "var(--color-foreground)" }}>
+                  <Link href={l.href} className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:text-foreground" style={{ color: "var(--color-muted)" }}>
                     {l.label}
                   </Link>
                 </li>
@@ -40,8 +40,8 @@ export default function Footer() {
                   <a
                     href={l.href}
                     {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:opacity-100 opacity-60 hover:text-foreground"
-                    style={{ color: "var(--color-foreground)" }}
+                    className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:text-foreground"
+                    style={{ color: "var(--color-muted)" }}
                   >
                     {l.label}
                   </a>
@@ -54,7 +54,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-2">
               {[{ label: "Home", href: "/" }, { label: "About", href: "/about" }].map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:opacity-100 opacity-60 hover:text-foreground" style={{ color: "var(--color-foreground)" }}>
+                  <Link href={l.href} className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:text-foreground" style={{ color: "var(--color-muted)" }}>
                     {l.label}
                   </Link>
                 </li>
@@ -65,12 +65,12 @@ export default function Footer() {
             <p className="text-[10px] font-mono uppercase tracking-widest mb-3" style={{ color: "var(--color-muted)" }}>Connect</p>
             <ul className="flex flex-col gap-2">
               <li>
-                <a href="mailto:hello@aaroncougle.com" className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:opacity-100 opacity-60 hover:text-foreground" style={{ color: "var(--color-foreground)" }}>
+                <a href="mailto:hello@aaroncougle.com" className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:text-foreground" style={{ color: "var(--color-muted)" }}>
                   Email
                 </a>
               </li>
               <li>
-                <a href="https://linkedin.com/in/aaroncougle" target="_blank" rel="noopener noreferrer" className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:opacity-100 opacity-60 hover:text-foreground" style={{ color: "var(--color-foreground)" }}>
+                <a href="https://linkedin.com/in/aaroncougle" target="_blank" rel="noopener noreferrer" className="text-[12px] transition-colors duration-150 font-[family-name:var(--font-inter)] hover:text-foreground" style={{ color: "var(--color-muted)" }}>
                   LinkedIn
                 </a>
               </li>

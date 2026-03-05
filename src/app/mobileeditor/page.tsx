@@ -151,13 +151,19 @@ const blocks: ContentBlock[] = [
           ].map((m) => (
             <div
               key={m.label}
-              className="flex flex-col gap-0.5 p-3 bg-[#f8f9fa] border border-border/50"
-              style={{ borderRadius: "var(--theme-card-radius, 12px)" }}
+              className="flex flex-col gap-0.5 p-3"
+              style={{
+                background: "var(--v2-surf)",
+                border: "1px solid var(--v2-border)",
+                backdropFilter: "blur(12px)",
+                borderRadius: 12,
+                boxShadow: "var(--v2-card-shadow)",
+              }}
             >
-              <span className="text-[1rem] md:text-[1.1rem] font-bold tracking-tight text-accent font-[family-name:var(--font-inter)]">
+              <span className="text-[1rem] md:text-[1.1rem] font-bold tracking-tight font-[family-name:var(--font-inter)]" style={{ color: "var(--color-accent)" }}>
                 {m.value}
               </span>
-              <span className="text-[11px] md:text-[12px] text-muted leading-snug font-[family-name:var(--font-inter)]">
+              <span className="text-[11px] md:text-[12px] leading-snug font-[family-name:var(--font-inter)]" style={{ color: "var(--v2-muted)" }}>
                 {m.label}
               </span>
             </div>
@@ -320,7 +326,7 @@ const blocks: ContentBlock[] = [
           year (2024-25). Solid lines show the experiment period (2025-26). The
           divergence starting around December is where the editor went live.
         </p>
-        <p className="mt-4 font-semibold text-foreground">
+        <p className="mt-4 font-semibold" style={{ color: "var(--v2-text)" }}>
           Second send is directly tied to our activation definition. The editor
           moved the metric that matters most for long-term revenue.
         </p>
