@@ -19,18 +19,15 @@ const blocks: ContentBlock[] = [
     content: (
       <>
         <p>
-          Small businesses want professional marketing, but setting up logos,
-          fonts, and colors from scratch is friction most don&rsquo;t have time
-          for. BrandKit removes that barrier. Users enter a website URL or
-          upload a logo, and the system extracts their brand elements and applies
-          them across email templates and landing pages automatically.
-        </p>
-        <p className="mt-4">
-          The project started as a quick-turn utility scoped to logo and color
-          import. Early usability sessions revealed users expected full brand
-          consistency across everything they created — fonts, imagery, tone. That
-          finding shifted BrandKit from a simple utility to something more
-          foundational in the product.
+          I designed BrandKit, a system that extracts logos, colors, and brand
+          elements from a URL or uploaded asset and applies them automatically
+          across email templates and landing pages. What started as a scoped
+          utility evolved into a foundational product feature after usability
+          sessions revealed users expected full brand consistency, not just a
+          color picker. We shipped a hybrid auto-mapping model with a manual
+          adjustment layer, measured against a control cohort over 60 days.
+          BrandKit drove a 21% lift in trial-to-paid conversion and is now
+          active across 400,000+ users.
         </p>
         <div className="mt-6 grid grid-cols-2 gap-2">
           {[
@@ -180,7 +177,7 @@ const blocks: ContentBlock[] = [
           The color mapping system works well on typical brand palettes, but it
           has limits. Brands with low-contrast colors, or palettes built around
           neutrals, still produce mappings that need adjustment. The hybrid
-          approach absorbs most of that friction, but it doesn&rsquo;t eliminate
+          approach absorbs most of that friction, but it doesn't eliminate
           it. Shipping something that works for 90% of users while knowing the
           other 10% will need to fix things manually is a calculated risk — one
           the conversion data suggests was worth taking, but a risk nonetheless.

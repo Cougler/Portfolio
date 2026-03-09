@@ -19,20 +19,15 @@ const blocks: ContentBlock[] = [
     content: (
       <>
         <p>
-          Mobile social posting existed inside Constant Contact, but retention
-          was poor. Many users tried it once and never came back. This wasn&rsquo;t
-          an activation problem — users understood the feature and chose to use
-          it. The problem was that the workflow was too costly to repeat. The
-          friction compounded every time someone tried to post across platforms,
-          manage multiple accounts, or figure out what to say.
-        </p>
-        <p className="mt-4">
-          I led the redesign of the mobile social posting experience, targeting
-          three structural problems: account management that lived outside the
-          creation flow, cross-posting that required repetitive manual adaptation,
-          and content uncertainty that caused users to abandon before publishing.
-          The work spanned research, systems design, and iterative rollout over
-          several months.
+          Mobile social posting had an activation problem masked as a retention
+          problem. Users tried it once and never came back because the workflow
+          was too costly to repeat. I redesigned the experience around three
+          structural fixes: moving account management into the creation flow,
+          adding intelligent cross-platform content adaptation, and introducing
+          contextual prompts to get users past the blank-composer drop-off. We
+          rolled out to 20% of users, saw consistent positive signal, and moved
+          to 100% within two weeks. Post completion rate increased 144% and
+          feature adoption grew 81% in the first three months.
         </p>
         <div className="mt-6 grid grid-cols-2 gap-2">
           {[
@@ -120,7 +115,7 @@ const blocks: ContentBlock[] = [
       <>
         <p>
           Early sessions with small business owners made clear that the struggle
-          wasn&rsquo;t WHERE to post — it was the time required to adapt content
+          wasn't WHERE to post — it was the time required to adapt content
           for each platform. Users were either posting the same copy everywhere
           and accepting it felt off-brand, or manually rewriting posts per
           platform and giving up partway through.
@@ -142,16 +137,16 @@ const blocks: ContentBlock[] = [
       <>
         <p>
           A recurring pattern from usability sessions was users stalling not
-          because the interface was confusing, but because they didn&rsquo;t
+          because the interface was confusing, but because they didn't
           know what to say. Blank composer, cursor blinking, session abandoned.
-          This wasn&rsquo;t an edge case — it was a consistent drop-off point
+          This wasn't an edge case — it was a consistent drop-off point
           visible in both session recordings and qualitative feedback.
         </p>
         <p className="mt-4">
           I introduced contextual prompts tailored to each selected platform
           and business category. These evolved into lightweight AI-assisted
           recommendations that generate starting points without replacing the
-          user&rsquo;s voice. The goal was to reduce the cost of beginning, not
+          user's voice. The goal was to reduce the cost of beginning, not
           to automate the post. Getting users past the blank state meant
           significantly more sessions ended in a publish.
         </p>
@@ -207,7 +202,7 @@ const blocks: ContentBlock[] = [
         <p className="mt-4">
           The AI content layer opened up something worth continuing. Helping
           users past the blank state without scripting their voice is a narrow
-          but meaningful target, and there&rsquo;s more to build there —
+          but meaningful target, and there's more to build there —
           especially as posting behavior diversifies across video, short-form,
           and platform-specific formats.
         </p>

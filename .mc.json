@@ -2,5 +2,5 @@
   "description": "Personal portfolio website",
   "status": "active",
   "stack": ["Next.js", "TypeScript", "Tailwind CSS"],
-  "notes": "Dark/light mode now persists via localStorage across all project pages, the about page, and the homepage — with glass card effects throughout. Current session: updating homepage UI polish including subheading copy, fixing light mode color bugs on project cards (arrow, title, description), removing card shadows, enlarging the nav logo, updating the favicon, and reworking the Prototyping in Production animation connections to use an angular fork routing. Not yet deployed."
+  "notes": "All three A/B test case studies (Mobile Web Experience, Mobile Email Editor, Contacts Upload) are fully built with accurate experiment data, comparison bar charts, and detailed narratives. Charts and metric cards dynamically adapt to dark/light mode via CSS variables. A page-level lightbox with prev/next navigation is wired up for all project images. Email editor page now focuses on MEQ-depth breakdowns for both sending and creation. Markdown exports of all three experiments are in casestudies/ for cross-project reference. Next: continue polish or add new case studies."
 }

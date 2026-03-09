@@ -5,33 +5,39 @@ import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
 
 const darkVars: React.CSSProperties = {
-  "--v2-bg":            "#08090A",
-  "--v2-surf":          "rgba(255,255,255,0.04)",
-  "--v2-border":        "rgba(255,255,255,0.08)",
-  "--v2-text":          "#F0F0F0",
-  "--v2-muted":         "#6B6F76",
-  "--v2-card-shadow":   "inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.4)",
-  "--color-background": "#08090A",
-  "--color-foreground": "#F0F0F0",
-  "--color-muted":      "#6B6F76",
-  "--color-border":     "rgba(255,255,255,0.08)",
-  background:           "#08090A",
-  color:                "#F0F0F0",
+  "--v2-bg":              "#08090A",
+  "--v2-surf":            "rgba(255,255,255,0.04)",
+  "--v2-border":          "rgba(255,255,255,0.08)",
+  "--v2-text":            "#F0F0F0",
+  "--v2-text-secondary":  "#B8BBC0",
+  "--v2-text-tertiary":   "#8B8F96",
+  "--v2-muted":           "#92969C",
+  "--v2-text-faint":      "#494D54",
+  "--v2-card-shadow":     "inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.4)",
+  "--color-background":   "#08090A",
+  "--color-foreground":   "#F0F0F0",
+  "--color-muted":        "#92969C",
+  "--color-border":       "rgba(255,255,255,0.08)",
+  background:             "#08090A",
+  color:                  "#F0F0F0",
 } as React.CSSProperties;
 
 const lightVars: React.CSSProperties = {
-  "--v2-bg":            "#F8F8FA",
-  "--v2-surf":          "rgba(0,0,0,0.03)",
-  "--v2-border":        "rgba(0,0,0,0.08)",
-  "--v2-text":          "#0f1a2a",
-  "--v2-muted":         "#6b7280",
-  "--v2-card-shadow":   "0 2px 16px rgba(0,0,0,0.07)",
-  "--color-background": "#F8F8FA",
-  "--color-foreground": "#0f1a2a",
-  "--color-muted":      "#6b7280",
-  "--color-border":     "rgba(0,0,0,0.08)",
-  background:           "#F8F8FA",
-  color:                "#0f1a2a",
+  "--v2-bg":              "#F8F8FA",
+  "--v2-surf":            "rgba(0,0,0,0.03)",
+  "--v2-border":          "rgba(0,0,0,0.08)",
+  "--v2-text":            "#0f1a2a",
+  "--v2-text-secondary":  "#2d3748",
+  "--v2-text-tertiary":   "#4a5568",
+  "--v2-muted":           "#595959",
+  "--v2-text-faint":      "#9ca3af",
+  "--v2-card-shadow":     "0 2px 16px rgba(0,0,0,0.07)",
+  "--color-background":   "#F8F8FA",
+  "--color-foreground":   "#0f1a2a",
+  "--color-muted":        "#595959",
+  "--color-border":       "rgba(0,0,0,0.08)",
+  background:             "#F8F8FA",
+  color:                  "#0f1a2a",
 } as React.CSSProperties;
 
 const testimonials = [
@@ -125,7 +131,7 @@ function TestimonialCard({ name, title, quote }: { name: string; title: string; 
       }}
     >
       <blockquote className="text-[14px] leading-[1.75] mb-4 font-[family-name:var(--font-inter)]" style={{ color: "var(--v2-muted)" }}>
-        &ldquo;{quote}&rdquo;
+        "{quote}"
       </blockquote>
       <div>
         <p className="text-[14px] font-semibold font-[family-name:var(--font-inter)]" style={{ color: "var(--v2-text)" }}>
@@ -197,7 +203,7 @@ export default function AboutContent() {
           <div className="text-[14.5px] leading-[1.75] font-[family-name:var(--font-inter)] space-y-4" style={{ color: "var(--v2-muted)" }}>
             <p>
               I simplify complex systems into clear, scalable experiences that
-              teams can build on. Over the past decade, I&rsquo;ve led work
+              teams can build on. Over the past decade, I've led work
               across onboarding, email editors, design systems, and mobile
               apps, helping products move faster without losing clarity or
               intent. My focus is where usability meets execution, because both
@@ -210,7 +216,7 @@ export default function AboutContent() {
               stay maintainable as products grow.
             </p>
             <p>
-              Data drives my decisions. In PLG environments, I&rsquo;ve
+              Data drives my decisions. In PLG environments, I've
               executed against key growth metrics like trial to paid (T:P) and
               visitor to trial (V:T), using both quantitative and qualitative
               insights to refine the experience. Whether identifying drop-off
@@ -224,14 +230,14 @@ export default function AboutContent() {
               feedback, and accountability when something feels off.
             </p>
             <p>
-              AI is part of how I think and work. It&rsquo;s not about
-              automation for its own sake. It&rsquo;s about clearing
+              AI is part of how I think and work. It's not about
+              automation for its own sake. It's about clearing
               space for better decisions, faster prototyping, and new
               possibilities that strengthen design outcomes without draining
               the team.
             </p>
             <p>
-              Outside of work, I&rsquo;m newly married and usually found with
+              Outside of work, I'm newly married and usually found with
               my Blue Heeler, Poppy, turning every walk into a frisbee
               tournament. I like things simple, balanced, and purposeful.
             </p>

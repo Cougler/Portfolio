@@ -13,36 +13,45 @@ const SURF      = "var(--v2-surf)";
 const SURF_HV   = "var(--v2-surf-hv)";
 const BORDER    = "var(--v2-border)";
 const BORDER_HV = "var(--v2-border-hv)";
-const TEXT      = "var(--v2-text)";
-const MUTED     = "var(--v2-muted)";
+const TEXT          = "var(--v2-text)";
+const TEXT_SECONDARY = "var(--v2-text-secondary)";
+const TEXT_TERTIARY  = "var(--v2-text-tertiary)";
+const MUTED          = "var(--v2-muted)";
+const TEXT_FAINT     = "var(--v2-text-faint)";
 const ACCENT    = "#5E6AD2";
 
 const darkVars: React.CSSProperties = {
-  "--v2-bg":          "#08090A",
-  "--v2-nav-bg":      "rgba(8,9,10,0.85)",
-  "--v2-surf":        "rgba(255,255,255,0.03)",
-  "--v2-surf-hv":     "rgba(255,255,255,0.055)",
-  "--v2-border":      "rgba(255,255,255,0.07)",
-  "--v2-border-hv":   "rgba(255,255,255,0.14)",
-  "--v2-text":        "#F0F0F0",
-  "--v2-muted":       "#6B6F76",
-  "--v2-dash":        "rgba(255,255,255,0.15)",
-  "--v2-card-shadow": "inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.4)",
-  "--color-accent":   "#8B96E9",
+  "--v2-bg":              "#08090A",
+  "--v2-nav-bg":          "rgba(8,9,10,0.85)",
+  "--v2-surf":            "rgba(255,255,255,0.03)",
+  "--v2-surf-hv":         "rgba(255,255,255,0.055)",
+  "--v2-border":          "rgba(255,255,255,0.07)",
+  "--v2-border-hv":       "rgba(255,255,255,0.14)",
+  "--v2-text":            "#F0F0F0",
+  "--v2-text-secondary":  "#B8BBC0",
+  "--v2-text-tertiary":   "#8B8F96",
+  "--v2-muted":           "#92969C",
+  "--v2-text-faint":      "#494D54",
+  "--v2-dash":            "rgba(255,255,255,0.15)",
+  "--v2-card-shadow":     "inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.4)",
+  "--color-accent":       "#8B96E9",
 } as React.CSSProperties;
 
 const lightVars: React.CSSProperties = {
-  "--v2-bg":          "#F8F8FA",
-  "--v2-nav-bg":      "rgba(248,248,250,0.9)",
-  "--v2-surf":        "rgba(0,0,0,0.03)",
-  "--v2-surf-hv":     "rgba(0,0,0,0.055)",
-  "--v2-border":      "rgba(0,0,0,0.08)",
-  "--v2-border-hv":   "rgba(0,0,0,0.14)",
-  "--v2-text":        "#0f1a2a",
-  "--v2-muted":       "#6b7280",
-  "--v2-dash":        "rgba(0,0,0,0.15)",
-  "--v2-card-shadow": "0 2px 16px rgba(0,0,0,0.07)",
-  "--color-accent":   "#4f46e5",
+  "--v2-bg":              "#F8F8FA",
+  "--v2-nav-bg":          "rgba(248,248,250,0.9)",
+  "--v2-surf":            "rgba(0,0,0,0.03)",
+  "--v2-surf-hv":         "rgba(0,0,0,0.055)",
+  "--v2-border":          "rgba(0,0,0,0.08)",
+  "--v2-border-hv":       "rgba(0,0,0,0.14)",
+  "--v2-text":            "#0f1a2a",
+  "--v2-text-secondary":  "#2d3748",
+  "--v2-text-tertiary":   "#4a5568",
+  "--v2-muted":           "#595959",
+  "--v2-text-faint":      "#9ca3af",
+  "--v2-dash":            "rgba(0,0,0,0.15)",
+  "--v2-card-shadow":     "0 2px 16px rgba(0,0,0,0.07)",
+  "--color-accent":       "#4f46e5",
 } as React.CSSProperties;
 
 const accentBg: Record<string, string> = {
@@ -171,7 +180,7 @@ function Hero() {
         className="text-[34px] md:text-[46px] lg:text-[52px] font-semibold leading-[1.05] tracking-[-0.03em] mb-4 md:mb-5"
         style={{ color: TEXT }}
       >
-        Hey, I&rsquo;m{" "}
+        Hey, I'm{" "}
         <Link
           href="/about"
           className="relative inline-flex items-center"
@@ -331,7 +340,7 @@ function ProjectCard({ p }: { p: ProjectData }) {
           ))}
         </div>
 
-        <p className="text-[13.5px] leading-relaxed max-w-[520px]" style={{ color: MUTED }}>{p.description}</p>
+        <p className="text-[13.5px] leading-relaxed max-w-[520px]" style={{ color: TEXT_SECONDARY }}>{p.description}</p>
       </div>
     </div>
   );
@@ -343,9 +352,9 @@ function ProjectCard({ p }: { p: ProjectData }) {
 
 const projects: ProjectData[] = [
   { date: "Jan 9, 2026", company: "Constant Contact", headline: "Initial results show 24% lift in send completion, improving activation", title: "Schedule Page", tags: [{ label: "Growth Experiment" }, { label: "Design lead" }], description: "By lowering cognitive overhead and improving send flow, early results from this experiment are showing an improvement in trial user sends, improving heavy drop off rate.", accentColor: "purple", comingSoon: true, imageSrc: "/animations/schedulepage.jpg", index: 1 },
-  { date: "Dec 15, 2025", company: "Constant Contact", headline: "+69% increase in first email sends by streamlining mobile web activation flows", title: "Mobile Web Experience", tags: [{ label: "Growth Experiment" }, { label: "Design lead" }, { label: "6-day turnaround" }, { label: "Figma Make" }], description: "Reduced cognitive overhead across creation, sending, and required setup steps to accelerate activation without impacting monetization.", accentColor: "purple", href: "/mobilewebexperience", videoSrc: "/animations/mweb-experience.mp4", index: 2 },
-  { date: "Nov 3, 2025", company: "Constant Contact", headline: "2x creator-to-sender conversion and +125% lift in second email sends", title: "Mobile Email Editor", tags: [{ label: "Growth Experiment" }, { label: "Patent Pending" }, { label: "Design lead" }], description: "Adapted a previously validated native editor into a robust mobile web system to strengthen the send–refine–send behavior tied directly to activation and revenue.", accentColor: "blue", href: "/mobileeditor", videoSrc: "/animations/mobile-editor.mp4", index: 3 },
-  { date: "Nov 19, 2025", company: "Constant Contact", headline: "+11.9% lift in file upload adoption by reducing friction in high intent workflow", title: "Contacts Upload Experience", tags: [{ label: "Lead growth designer" }, { label: "~24,000 monthly users" }, { label: "Statsig in 1.5 weeks" }, { label: "Growth Experiment" }], description: "Simplified upload, mapping, and consent flows to eliminate false completion signals and increase list growth in a high-intent moment.", accentColor: "blue", href: "/contacts", videoSrc: "/animations/contacts-upload.mp4", index: 4 },
+  { date: "Dec 22, 2025", company: "Constant Contact", headline: "+10.6% lift in email sends and +$861K est. annual revenue impact", title: "Mobile Web Experience", tags: [{ label: "Growth Experiment" }, { label: "Design lead" }, { label: "Gamification" }], description: "Built a gamified activation path for mobile web from scratch. A/B tested across 25K+ users, driving higher sends, stronger funnel engagement, and higher-value conversions.", accentColor: "purple", href: "/mobilewebexperience", videoSrc: "/animations/mweb-experience.mp4", index: 2 },
+  { date: "Dec 19, 2025", company: "Constant Contact", headline: "+2.1% T2P conversion with fewer sends, indicating a more efficient path to payment", title: "Mobile Email Editor", tags: [{ label: "Growth Experiment" }, { label: "Patent Pending" }, { label: "Design lead" }], description: "Built a full mobile web email editor that improved conversion quality. Users sent fewer emails but converted at a higher rate, suggesting the editor replaced confusion-driven sends with intentional ones.", accentColor: "blue", href: "/mobileeditor", videoSrc: "/animations/mobile-editor.mp4", index: 3 },
+  { date: "Dec 16, 2025", company: "Constant Contact", headline: "+3.0% T2P conversion and +$215K est. annual revenue from better contact uploads", title: "Contacts Upload Experience", tags: [{ label: "Lead growth designer" }, { label: "~20K users/year" }, { label: "Growth Experiment" }], description: "Simplified upload, mapping, and consent flows to eliminate false completion signals. Deeper contact imports cascaded into more sends and more conversions, the most balanced result of all three experiments.", accentColor: "blue", href: "/contacts", videoSrc: "/animations/contacts-upload.mp4", index: 4 },
   { date: "May 12, 2025", company: "Constant Contact", headline: "+140% increase in post completion and +81% increase in feature adoption", title: "Social Management", tags: [{ label: "New Feature" }], description: "Reduced friction in cross-posting by unifying account selection, clarifying posting states, and guiding users on what to publish.", accentColor: "green", href: "/social", videoSrc: "/animations/social.mp4", index: 5 },
   { date: "Nov 24, 2021", company: "Constant Contact", headline: "21% lift in trial user activation + conversions", title: "Brand Kit", tags: [{ label: "Feature" }, { label: "400,000+ users" }], description: "Replaced manual brand configuration with a guided, automated system that maps logos and colors intelligently, reducing setup friction.", accentColor: "green", href: "/brandkit", videoSrc: "/animations/brandkit.mp4", timelinePt: "pt-[52px]", index: 6 },
 ];
@@ -369,8 +378,8 @@ type AICardData = {
 const aiCards: AICardData[] = [
   { title: "Prototyping in production", description: "I clone the live production repo, use asset override URLs to point the running app at local files, then use Claude Code to make design changes directly in the codebase. The output is a branch developers can review and ship with no design translation layer.", tags: ["Claude Code", "React", "GitHub"], preview: ProductionPrototypingAnimation },
   { title: "Data analysis", description: "I connect Cursor to Snowflake through an API to explore, query, and understand user behavior data, making design decisions based on raw usage patterns.", tags: ["Cursor", "Snowflake"], preview: DataFlowAnimation },
-  { title: "Design ideation", description: "I use AI to rapidly ideate and iterate on design concepts, from early exploration through high-fidelity refinement, across Cursor and Figma Make.", tags: ["Cursor", "Figma Make"], preview: DesignIterationAnimation },
-  { title: "Organization", description: "I connect to Jira and build personal dashboards that surface real-time project data, helping me create tasks, track progress, and stay organized across workstreams.", tags: ["Cursor", "Jira"], preview: OrganizationAnimation },
+  { title: "Design ideation", description: "I use AI to rapidly ideate and iterate on design concepts, from early exploration through high-fidelity refinement, across Cursor and Figma Make.", tags: ["Cursor", "Figma Make", "Pencil.dev"], preview: DesignIterationAnimation },
+  { title: "Organization", description: "I connect to Jira and build personal dashboards that surface real-time project data, helping me create tasks, track progress, and stay organized across workstreams.", tags: ["Cursor", "Jira", "Linear"], preview: OrganizationAnimation },
 ];
 
 function AIFeaturedCard({ card, isActive }: { card: AICardData; isActive: boolean }) {

@@ -23,6 +23,7 @@ export type TimeSeriesChartProps = {
   rightAxisLabel?: string;
   leftAxisUnit?: string;
   rightAxisUnit?: string;
+  experimentDate?: string;
 };
 
 const PADDING = { top: 24, right: 56, bottom: 72, left: 52 };
@@ -88,6 +89,7 @@ export default function MetricChart({
   rightAxisLabel,
   leftAxisUnit = "%",
   rightAxisUnit = "",
+  experimentDate,
 }: TimeSeriesChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
@@ -95,7 +97,6 @@ export default function MetricChart({
   const svgWidth = 680;
   const plotW = svgWidth - PADDING.left - PADDING.right;
   const plotH = CHART_HEIGHT;
-  const svgH = CHART_HEIGHT + PADDING.top + PADDING.bottom;
 
   const leftSeries = series.filter((s) => (s.yAxis ?? "left") === "left");
   const rightSeries = series.filter((s) => s.yAxis === "right");
@@ -116,6 +117,10 @@ export default function MetricChart({
         )
       )
     : 1;
+
+  const experimentIdx = experimentDate
+    ? data.findIndex((d) => d.date === experimentDate)
+    : -1;
 
   const xScale = (i: number) =>
     PADDING.left + (i / Math.max(data.length - 1, 1)) * plotW;
@@ -153,14 +158,28 @@ export default function MetricChart({
 
   const xLabelInterval = Math.max(1, Math.ceil(data.length / 7));
 
-  const legendTotalWidth = series.reduce(
-    (acc, s) => acc + s.label.length * 6.5 + 30,
-    0
-  );
-  const legendStartX = Math.max(
-    PADDING.left,
-    PADDING.left + (plotW - legendTotalWidth) / 2
-  );
+  const legendRowHeight = 20;
+  const maxLegendWidth = plotW;
+  const legendItems: { s: LineSeries; x: number; row: number }[] = [];
+  let curRow = 0;
+  let curX = 0;
+  for (const s of series) {
+    const itemW = s.label.length * 6.5 + 36;
+    if (curX + itemW > maxLegendWidth && curX > 0) {
+      curRow++;
+      curX = 0;
+    }
+    legendItems.push({ s, x: curX, row: curRow });
+    curX += itemW;
+  }
+  const legendRows = curRow + 1;
+  const rowWidths: number[] = [];
+  for (const item of legendItems) {
+    const itemW = item.s.label.length * 6.5 + 36;
+    rowWidths[item.row] = (rowWidths[item.row] ?? 0) + itemW;
+  }
+  const extraLegendH = Math.max(0, (legendRows - 1) * legendRowHeight);
+  const svgH = CHART_HEIGHT + PADDING.top + PADDING.bottom + extraLegendH;
 
   return (
     <div className="mt-4 md:mt-5 mb-2 w-full touch-pan-y">
@@ -168,7 +187,7 @@ export default function MetricChart({
         ref={svgRef}
         viewBox={`0 0 ${svgWidth} ${svgH}`}
         className="w-full select-none"
-        style={{ backgroundColor: "rgba(248, 249, 250, 1)", borderRadius: 16 }}
+        style={{ backgroundColor: "var(--v2-bg)", borderRadius: 16 }}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setHoveredIdx(null)}
         onTouchStart={handleTouchMove}
@@ -186,7 +205,7 @@ export default function MetricChart({
                 x2={svgWidth - PADDING.right}
                 y1={y}
                 y2={y}
-                stroke="#f0f0f0"
+                style={{ stroke: "var(--v2-border)" }}
                 strokeWidth={1}
               />
               <text
@@ -194,7 +213,7 @@ export default function MetricChart({
                 y={y + 4}
                 textAnchor="end"
                 fontSize={10}
-                className="fill-[#9ca3af]"
+                style={{ fill: "var(--v2-text-faint)" }}
                 fontFamily="var(--font-inter), system-ui, sans-serif"
               >
                 {val % 1 === 0 ? val : val.toFixed(1)}
@@ -216,7 +235,7 @@ export default function MetricChart({
                 y={y + 4}
                 textAnchor="start"
                 fontSize={10}
-                className="fill-[#9ca3af]"
+                style={{ fill: "var(--v2-text-faint)" }}
                 fontFamily="var(--font-inter), system-ui, sans-serif"
               >
                 {val >= 1000
@@ -239,7 +258,7 @@ export default function MetricChart({
               y={PADDING.top + plotH + 20}
               textAnchor="middle"
               fontSize={10}
-              className="fill-[#9ca3af]"
+              style={{ fill: "var(--v2-text-faint)" }}
               fontFamily="var(--font-inter), system-ui, sans-serif"
             >
               {formatDate(d.date)}
@@ -268,6 +287,36 @@ export default function MetricChart({
               />
             );
           })}
+
+        {/* Experiment marker */}
+        {experimentIdx >= 0 && (() => {
+          const mx = xScale(experimentIdx);
+          return (
+            <g pointerEvents="none">
+              <line
+                x1={mx}
+                x2={mx}
+                y1={PADDING.top}
+                y2={PADDING.top + plotH}
+                style={{ stroke: "var(--color-accent)" }}
+                strokeWidth={1.5}
+                strokeDasharray="6 4"
+                opacity={0.6}
+              />
+              <text
+                x={mx}
+                y={PADDING.top - 8}
+                textAnchor="middle"
+                fontSize={9}
+                fontWeight={600}
+                style={{ fill: "var(--color-accent)" }}
+                fontFamily="var(--font-inter), system-ui, sans-serif"
+              >
+                Experiment start
+              </text>
+            </g>
+          );
+        })()}
 
         {/* Lines */}
         {series.map((s) => {
@@ -298,7 +347,7 @@ export default function MetricChart({
               cy={yScale(s, d.values[s.key] ?? 0)}
               r={hoveredIdx === i ? 4 : 0}
               fill={s.color}
-              stroke="white"
+              style={{ stroke: "var(--v2-bg)" }}
               strokeWidth={2}
             />
           ))
@@ -311,7 +360,7 @@ export default function MetricChart({
             x2={xScale(hoveredIdx)}
             y1={PADDING.top}
             y2={PADDING.top + plotH}
-            stroke="#d1d5db"
+            style={{ stroke: "var(--v2-border-hv)" }}
             strokeWidth={1}
             strokeDasharray="4 3"
             pointerEvents="none"
@@ -403,7 +452,7 @@ export default function MetricChart({
             y={PADDING.top + plotH / 2}
             textAnchor="middle"
             fontSize={10}
-            className="fill-[#9ca3af]"
+            style={{ fill: "var(--v2-text-faint)" }}
             fontFamily="var(--font-inter), system-ui, sans-serif"
             transform={`rotate(-90, ${PADDING.left - 40}, ${
               PADDING.top + plotH / 2
@@ -418,7 +467,7 @@ export default function MetricChart({
             y={PADDING.top + plotH / 2}
             textAnchor="middle"
             fontSize={10}
-            className="fill-[#9ca3af]"
+            style={{ fill: "var(--v2-text-faint)" }}
             fontFamily="var(--font-inter), system-ui, sans-serif"
             transform={`rotate(90, ${svgWidth - PADDING.right + 44}, ${
               PADDING.top + plotH / 2
@@ -428,37 +477,34 @@ export default function MetricChart({
           </text>
         )}
 
-        {/* Legend — centered within plot area */}
-        <g transform={`translate(${legendStartX}, ${PADDING.top + plotH + 38})`}>
-          {series.map((s, i) => {
-            const offset = series
-              .slice(0, i)
-              .reduce((acc, prev) => acc + prev.label.length * 6.5 + 30, 0);
-            return (
-              <g key={s.key} transform={`translate(${offset}, 0)`}>
-                <line
-                  x1={0}
-                  x2={14}
-                  y1={5}
-                  y2={5}
-                  stroke={s.color}
-                  strokeWidth={2}
-                  strokeDasharray={s.style === "dashed" ? "4 3" : undefined}
-                />
-                <circle cx={7} cy={5} r={3} fill={s.color} />
-                <text
-                  x={18}
-                  y={9}
-                  fontSize={10}
-                  className="fill-[#6b7280]"
-                  fontFamily="var(--font-inter), system-ui, sans-serif"
-                >
-                  {s.label}
-                </text>
-              </g>
-            );
-          })}
-        </g>
+        {/* Legend — centered per row, wraps when needed */}
+        {legendItems.map((item, i) => {
+          const rowStartX = PADDING.left + (plotW - (rowWidths[item.row] ?? 0)) / 2;
+          const y = PADDING.top + plotH + 38 + item.row * legendRowHeight;
+          return (
+            <g key={item.s.key} transform={`translate(${rowStartX + item.x}, ${y})`}>
+              <line
+                x1={0}
+                x2={18}
+                y1={5}
+                y2={5}
+                stroke={item.s.color}
+                strokeWidth={2}
+                strokeDasharray={item.s.style === "dashed" ? "6 4" : undefined}
+                strokeLinecap="round"
+              />
+              <text
+                x={24}
+                y={9}
+                fontSize={10}
+                style={{ fill: "var(--v2-muted)" }}
+                fontFamily="var(--font-inter), system-ui, sans-serif"
+              >
+                {item.s.label}
+              </text>
+            </g>
+          );
+        })}
       </svg>
     </div>
   );

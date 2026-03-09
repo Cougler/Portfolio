@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState, useCallback } from "react";
 import Footer from "@/components/Footer";
 import MetricChart from "@/components/MetricChart";
+import ComparisonBarChart from "@/components/ComparisonBarChart";
 import type {
   TimeSeriesPoint,
   LineSeries,
@@ -11,39 +12,45 @@ import type {
 
 // ─── Theme tokens ──────────────────────────────────────────────────────────────
 const darkVars: React.CSSProperties = {
-  "--v2-bg":            "#08090A",
-  "--v2-surf":          "rgba(255,255,255,0.04)",
-  "--v2-surf-hv":       "rgba(255,255,255,0.07)",
-  "--v2-border":        "rgba(255,255,255,0.08)",
-  "--v2-border-hv":     "rgba(255,255,255,0.15)",
-  "--v2-text":          "#F0F0F0",
-  "--v2-muted":         "#6B6F76",
-  "--v2-card-shadow":   "inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.4)",
-  "--color-background": "#08090A",
-  "--color-foreground": "#F0F0F0",
-  "--color-muted":      "#6B6F76",
-  "--color-border":     "rgba(255,255,255,0.08)",
-  "--color-accent":     "#8B96E9",
-  background:           "#08090A",
-  color:                "#F0F0F0",
+  "--v2-bg":              "#08090A",
+  "--v2-surf":            "rgba(255,255,255,0.04)",
+  "--v2-surf-hv":         "rgba(255,255,255,0.07)",
+  "--v2-border":          "rgba(255,255,255,0.08)",
+  "--v2-border-hv":       "rgba(255,255,255,0.15)",
+  "--v2-text":            "#F0F0F0",
+  "--v2-text-secondary":  "#B8BBC0",
+  "--v2-text-tertiary":   "#8B8F96",
+  "--v2-muted":           "#92969C",
+  "--v2-text-faint":      "#494D54",
+  "--v2-card-shadow":     "inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.4)",
+  "--color-background":   "#08090A",
+  "--color-foreground":   "#F0F0F0",
+  "--color-muted":        "#92969C",
+  "--color-border":       "rgba(255,255,255,0.08)",
+  "--color-accent":       "#8B96E9",
+  background:             "#08090A",
+  color:                  "#F0F0F0",
 } as React.CSSProperties;
 
 const lightVars: React.CSSProperties = {
-  "--v2-bg":            "#F8F8FA",
-  "--v2-surf":          "rgba(0,0,0,0.03)",
-  "--v2-surf-hv":       "rgba(0,0,0,0.06)",
-  "--v2-border":        "rgba(0,0,0,0.08)",
-  "--v2-border-hv":     "rgba(0,0,0,0.14)",
-  "--v2-text":          "#0f1a2a",
-  "--v2-muted":         "#6b7280",
-  "--v2-card-shadow":   "0 2px 16px rgba(0,0,0,0.07)",
-  "--color-background": "#F8F8FA",
-  "--color-foreground": "#0f1a2a",
-  "--color-muted":      "#6b7280",
-  "--color-border":     "rgba(0,0,0,0.08)",
-  "--color-accent":     "#4f46e5",
-  background:           "#F8F8FA",
-  color:                "#0f1a2a",
+  "--v2-bg":              "#F8F8FA",
+  "--v2-surf":            "rgba(0,0,0,0.03)",
+  "--v2-surf-hv":         "rgba(0,0,0,0.06)",
+  "--v2-border":          "rgba(0,0,0,0.08)",
+  "--v2-border-hv":       "rgba(0,0,0,0.14)",
+  "--v2-text":            "#0f1a2a",
+  "--v2-text-secondary":  "#2d3748",
+  "--v2-text-tertiary":   "#4a5568",
+  "--v2-muted":           "#595959",
+  "--v2-text-faint":      "#9ca3af",
+  "--v2-card-shadow":     "0 2px 16px rgba(0,0,0,0.07)",
+  "--color-background":   "#F8F8FA",
+  "--color-foreground":   "#0f1a2a",
+  "--color-muted":        "#595959",
+  "--color-border":       "rgba(0,0,0,0.08)",
+  "--color-accent":       "#4f46e5",
+  background:             "#F8F8FA",
+  color:                  "#0f1a2a",
 } as React.CSSProperties;
 
 export type MetricItem = {
@@ -58,6 +65,9 @@ export type MetricGroupChart = {
   rightAxisLabel?: string;
   leftAxisUnit?: string;
   rightAxisUnit?: string;
+  experimentDate?: string;
+  chartType?: "line" | "bar";
+  showValues?: boolean;
 };
 
 export type MetricGroup = {
@@ -68,7 +78,7 @@ export type MetricGroup = {
 };
 
 export type ContentBlock =
-  | { type: "section"; title: string; content: React.ReactNode }
+  | { type: "section"; title?: string; content: React.ReactNode }
   | { type: "metrics"; groups: MetricGroup[] }
   | { type: "image"; src: string; alt: string; caption?: string }
   | { type: "video"; src: string; caption?: string }
@@ -84,6 +94,139 @@ export type CaseStudyProps = {
   heroImageSrc?: string;
   blocks: ContentBlock[];
 };
+
+// ─── Lightbox context ─────────────────────────────────────────────────────────
+type LightboxCtx = {
+  register: (src: string, alt: string) => number;
+  open: (index: number) => void;
+};
+const LightboxContext = createContext<LightboxCtx | null>(null);
+
+function LightboxProvider({ children }: { children: React.ReactNode }) {
+  const images = useRef<{ src: string; alt: string }[]>([]);
+  const [current, setCurrent] = useState(-1);
+  const isOpen = current >= 0;
+
+  const register = useCallback((src: string, alt: string) => {
+    const existing = images.current.findIndex((img) => img.src === src);
+    if (existing >= 0) return existing;
+    return images.current.push({ src, alt }) - 1;
+  }, []);
+
+  const openAt = useCallback((index: number) => setCurrent(index), []);
+  const close = useCallback(() => setCurrent(-1), []);
+  const prev = useCallback(() => setCurrent((c) => (c <= 0 ? images.current.length - 1 : c - 1)), []);
+  const next = useCallback(() => setCurrent((c) => (c >= images.current.length - 1 ? 0 : c + 1)), []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowLeft") prev();
+      else if (e.key === "ArrowRight") next();
+    }
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, close, prev, next]);
+
+  const img = isOpen ? images.current[current] : null;
+  const total = images.current.length;
+
+  return (
+    <LightboxContext.Provider value={{ register, open: openAt }}>
+      {children}
+      {isOpen && img && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          style={{ backgroundColor: "rgba(0,0,0,0.9)", backdropFilter: "blur(12px)" }}
+          onClick={close}
+        >
+          {/* Close button */}
+          <button
+            onClick={close}
+            className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full transition-colors"
+            style={{ background: "rgba(255,255,255,0.1)" }}
+            aria-label="Close lightbox"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 5l10 10M15 5L5 15" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+
+          {/* Counter */}
+          {total > 1 && (
+            <div
+              className="absolute top-5 left-1/2 -translate-x-1/2 text-[13px] font-medium tabular-nums"
+              style={{ color: "rgba(255,255,255,0.5)" }}
+            >
+              {current + 1} / {total}
+            </div>
+          )}
+
+          {/* Prev arrow */}
+          {total > 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); prev(); }}
+              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full transition-colors"
+              style={{ background: "rgba(255,255,255,0.1)" }}
+              aria-label="Previous image"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M12 5l-5 5 5 5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
+
+          {/* Image */}
+          <img
+            src={img.src}
+            alt={img.alt}
+            className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg select-none"
+            style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}
+            onClick={(e) => e.stopPropagation()}
+            draggable={false}
+          />
+
+          {/* Next arrow */}
+          {total > 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); next(); }}
+              className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full transition-colors"
+              style={{ background: "rgba(255,255,255,0.1)" }}
+              aria-label="Next image"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M8 5l5 5-5 5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
+        </div>
+      )}
+    </LightboxContext.Provider>
+  );
+}
+
+function ExpandableImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  const ctx = useContext(LightboxContext);
+  const indexRef = useRef(-1);
+
+  useEffect(() => {
+    if (ctx) indexRef.current = ctx.register(src, alt);
+  }, [ctx, src, alt]);
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={`${className ?? ""} cursor-zoom-in`}
+      onClick={() => ctx?.open(indexRef.current)}
+    />
+  );
+}
 
 function BackButton() {
   return (
@@ -208,11 +351,10 @@ function MetricCard({ value, label }: MetricItem) {
         border: "1px solid var(--v2-border)",
         backdropFilter: "blur(12px)",
         borderRadius: 12,
-        boxShadow: "var(--v2-card-shadow)",
       }}
     >
       <span
-        className="text-[1.25rem] md:text-[1.75rem] font-bold tracking-tight font-[family-name:var(--font-inter)]"
+        className="text-[1.5rem] md:text-[2rem] font-bold tracking-tight font-[family-name:var(--font-inter)]"
         style={{ color: isPositive ? "var(--color-accent)" : "var(--v2-text)" }}
       >
         {value}
@@ -227,10 +369,12 @@ function MetricCard({ value, label }: MetricItem) {
 function renderNarrowBlock(block: ContentBlock, i: number) {
   if (block.type === "section") {
     return (
-      <ScrollReveal key={block.title}>
-        <h2 className="text-[1.125rem] md:text-[1.4rem] font-bold tracking-[-0.01em] mb-3 md:mb-4 font-[family-name:var(--font-inter)]">
-          {block.title}
-        </h2>
+      <ScrollReveal key={block.title ?? `section-${i}`}>
+        {block.title && (
+          <h2 className="text-[1.125rem] md:text-[1.4rem] font-bold tracking-[-0.01em] mb-3 md:mb-4 font-[family-name:var(--font-inter)]">
+            {block.title}
+          </h2>
+        )}
         <div className="text-[15px] md:text-[14.5px] leading-[1.7] md:leading-[1.75] font-[family-name:var(--font-inter)]" style={{ color: "var(--v2-muted)" }}>
           {block.content}
         </div>
@@ -256,16 +400,28 @@ function renderNarrowBlock(block: ContentBlock, i: number) {
                 <MetricCard key={metric.label} {...metric} />
               ))}
             </div>
-            {group.chart && (
-              <MetricChart
-                data={group.chart.data}
-                series={group.chart.series}
-                leftAxisLabel={group.chart.leftAxisLabel}
-                rightAxisLabel={group.chart.rightAxisLabel}
-                leftAxisUnit={group.chart.leftAxisUnit}
-                rightAxisUnit={group.chart.rightAxisUnit}
-              />
-            )}
+            {group.chart &&
+              (group.chart.chartType === "bar" ? (
+                <ComparisonBarChart
+                  data={group.chart.data}
+                  series={group.chart.series}
+                  leftAxisLabel={group.chart.leftAxisLabel}
+                  rightAxisLabel={group.chart.rightAxisLabel}
+                  leftAxisUnit={group.chart.leftAxisUnit}
+                  rightAxisUnit={group.chart.rightAxisUnit}
+                  showValues={group.chart.showValues}
+                />
+              ) : (
+                <MetricChart
+                  data={group.chart.data}
+                  series={group.chart.series}
+                  leftAxisLabel={group.chart.leftAxisLabel}
+                  rightAxisLabel={group.chart.rightAxisLabel}
+                  leftAxisUnit={group.chart.leftAxisUnit}
+                  rightAxisUnit={group.chart.rightAxisUnit}
+                  experimentDate={group.chart.experimentDate}
+                />
+              ))}
           </div>
         ))}
       </ScrollReveal>
@@ -301,7 +457,7 @@ function renderContentBlocks(blocks: ContentBlock[]) {
             className="w-full overflow-hidden rounded-none md:rounded-2xl"
             style={{ background: "var(--v2-surf)" }}
           >
-            <img
+            <ExpandableImage
               src={block.src}
               alt={block.alt}
               className="w-full h-auto object-cover"
@@ -349,7 +505,7 @@ function renderContentBlocks(blocks: ContentBlock[]) {
                 className="w-full overflow-hidden rounded-none md:rounded-2xl"
                 style={{ background: "var(--v2-surf)" }}
               >
-                <img
+                <ExpandableImage
                   src={img.src}
                   alt={img.alt}
                   className="w-full h-auto object-cover"
@@ -399,6 +555,7 @@ export default function CaseStudyLayout({
   }
 
   return (
+    <LightboxProvider>
     <div
       className="min-h-screen flex flex-col gap-12 md:gap-[90px]"
       style={{
@@ -482,5 +639,6 @@ export default function CaseStudyLayout({
 
       <Footer />
     </div>
+    </LightboxProvider>
   );
 }

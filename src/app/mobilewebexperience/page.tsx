@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import CaseStudyLayout from "@/components/CaseStudyLayout";
 import type { ContentBlock, MetricGroupChart } from "@/components/CaseStudyLayout";
-import type { TimeSeriesPoint } from "@/components/MetricChart";
 
 export const metadata: Metadata = {
   title: "Mobile Web Experience – Aaron Cougle",
   description:
-    "+69% increase in first email sends by streamlining mobile web activation flows.",
+    "+10.6% lift in email sends and +$861K estimated annual revenue impact.",
 };
 
 const role = ["Product Design", "UX Strategy", "Interaction Design"];
@@ -14,147 +13,76 @@ const team = ["PLG growth", "Experimentation"];
 const tools = ["Figma", "Notion", "Statsig", "Cursor", "Snowflake MCP"];
 
 /*
- * Real weekly cohort data from the mobile trial funnel.
- * 2024-25 = prior year baseline (Oct 2024 – Feb 2025)
- * 2025-26 = experiment period  (Oct 2025 – Feb 2026)
- * X-axis labels use relative week numbers so both years overlay cleanly.
- * The experiment launched around week of Dec 1, 2025 (week index ~8).
+ * A/B test: simplified_mweb_experience (Statsig)
+ * Experiment dates: Dec 22, 2025 – Jan 27, 2026
+ * Control: 12,670 users | Test: 12,799 users
  */
 
-const weekLabels = [
-  "Oct W1", "Oct W2", "Oct W3", "Oct W4",
-  "Nov W1", "Nov W2", "Nov W3", "Nov W4",
-  "Dec W1", "Dec W2", "Dec W3", "Dec W4",
-  "Jan W1", "Jan W2", "Jan W3", "Jan W4",
-  "Feb W1", "Feb W2",
-];
-
-function makeData(
-  metrics: Record<string, number[]>
-): TimeSeriesPoint[] {
-  return weekLabels.map((label, i) => ({
-    date: label,
-    values: Object.fromEntries(
-      Object.entries(metrics).map(([k, arr]) => [k, arr[i]])
-    ),
-  }));
-}
-
-/* ── Sending: S1 (sent 1+ emails, 14D) ── */
 const sendingChart: MetricGroupChart = {
-  data: makeData({
-    s1Current: [
-      //Oct 6  Oct 13  Oct 20  Oct 27  Nov 3  Nov 10  Nov 17  Nov 24  Dec 1  Dec 8  Dec 15  Dec 22  Jan 5  Jan 12  Jan 19  Jan 26  Feb 2  Feb 9
-        2.0,    2.0,    2.0,    2.5,    3.0,   3.0,    3.0,    3.0,   3.0,   3.5,    3.5,    4.0,   5.0,   5.5,    6.0,    5.5,   5.0,   5.0,
-    ],
-    s1Prior: [
-      //Oct 7  Oct 14  Oct 21  Oct 28  Nov 4  Nov 11  Nov 18  Nov 25  Dec 2  Dec 9  Dec 16  Dec 23  Jan 6  Jan 13  Jan 20  Jan 27  Feb 3  Feb 10
-        2.0,    2.0,    2.0,    1.5,    2.0,   1.8,    2.0,    2.0,   2.0,   2.0,    2.0,    2.5,   2.0,   2.0,    2.5,    2.0,   2.0,   2.0,
-    ],
-    trials: [
-      3000, 2900, 3200, 4000, 4200, 4500, 4800, 5000, 3700, 4500, 5000, 5500, 6000, 6200, 6500, 6800, 7000, 6500,
-    ],
-  }),
+  data: [
+    { date: "Control", values: { sentAny: 13.91, sentMEQ1: 8.35, sentMEQ2: 2.84, sentMEQ3: 2.72 } },
+    { date: "Test", values: { sentAny: 15.39, sentMEQ1: 9.41, sentMEQ2: 2.80, sentMEQ3: 3.18 } },
+  ],
   series: [
-    { key: "s1Current", label: "2025-26 Sent 1+", color: "#4f46e5" },
-    { key: "s1Prior",   label: "2024-25 Sent 1+", color: "#4f46e5", style: "dashed" },
-    { key: "trials",    label: "Trials (2025-26)", color: "#9ca3af", yAxis: "right", areaFill: true },
+    { key: "sentAny",  label: "Sent any",       color: "#4f46e5" },
+    { key: "sentMEQ1", label: "Sent exactly 1",  color: "#06b6d4" },
+    { key: "sentMEQ2", label: "Sent exactly 2",  color: "#8b5cf6" },
+    { key: "sentMEQ3", label: "Sent 3+",         color: "#f59e0b" },
   ],
   leftAxisUnit: "%",
-  rightAxisLabel: "Trials",
+  chartType: "bar",
 };
 
-/* ── Prerequisites: Email Verified + Physical Address (14D) ── */
-const prerequisitesChart: MetricGroupChart = {
-  data: makeData({
-    evCurrent: [
-      //Oct 6  Oct 13  Oct 20  Oct 27  Nov 3  Nov 10  Nov 17  Nov 24  Dec 1  Dec 8  Dec 15  Dec 22  Jan 5  Jan 12  Jan 19  Jan 26  Feb 2  Feb 9
-        28,     28,     28,     30,     32,    35,     35,     38,     32,    32,     35,     35,     37,    38,     40,     40,     42,    40,
-    ],
-    evPrior: [
-      //Oct 7  Oct 14  Oct 21  Oct 28  Nov 4  Nov 11  Nov 18  Nov 25  Dec 2  Dec 9  Dec 16  Dec 23  Jan 6  Jan 13  Jan 20  Jan 27  Feb 3  Feb 10
-        28,     28,     28,     30,     30,    30,     30,     28,     28,    30,     30,     28,     30,    30,     32,     32,     30,    32,
-    ],
-    paCurrent: [
-      12, 10, 15, 25, 35, 50, 55, 60, 55, 55, 55, 55, 52, 50, 48, 48, 45, 45,
-    ],
-    paPrior: [
-      4.0, 4.0, 4.0, 5.0, 5.0, 5.5, 5.5, 6.0, 6.0, 6.5, 6.5, 7.0, 7.0, 7.0, 7.5, 7.0, 6.5, 6.5,
-    ],
-    trials: [
-      3000, 2900, 3200, 4000, 4200, 4500, 4800, 5000, 3700, 4500, 5000, 5500, 6000, 6200, 6500, 6800, 7000, 6500,
-    ],
-  }),
+const funnelChart: MetricGroupChart = {
+  data: [
+    { date: "Control", values: { emailVerified: 66.45, physicalAddress: 66.39, secondLogin: 45.51 } },
+    { date: "Test", values: { emailVerified: 69.66, physicalAddress: 68.22, secondLogin: 46.32 } },
+  ],
   series: [
-    { key: "evCurrent", label: "2025-26 Email Verified",     color: "#4f46e5" },
-    { key: "evPrior",   label: "2024-25 Email Verified",     color: "#4f46e5", style: "dashed" },
-    { key: "paCurrent", label: "2025-26 Physical Address",   color: "#06b6d4" },
-    { key: "paPrior",   label: "2024-25 Physical Address",   color: "#06b6d4", style: "dashed" },
-    { key: "trials",    label: "Trials (2025-26)",           color: "#9ca3af", yAxis: "right", areaFill: true },
+    { key: "emailVerified",   label: "Email verified",     color: "#4f46e5" },
+    { key: "physicalAddress",  label: "Physical address",   color: "#06b6d4" },
+    { key: "secondLogin",     label: "Second login",        color: "#8b5cf6" },
   ],
   leftAxisUnit: "%",
-  rightAxisLabel: "Trials",
+  chartType: "bar",
 };
 
-/* ── Email Creation: EC1 + EC2 (14D) ── */
-const creationChart: MetricGroupChart = {
-  data: makeData({
-    ec1Current: [
-      //Oct 6  Oct 13  Oct 20  Oct 27  Nov 3  Nov 10  Nov 17  Nov 24  Dec 1  Dec 8  Dec 15  Dec 22  Jan 5  Jan 12  Jan 19  Jan 26  Feb 2  Feb 9
-        6,      9.8,    8,      8,      10,    10,     10,     10,     10,    11,     11,     12,     14,    15,     14,     13,     12,    12,
-    ],
-    ec1Prior: [
-      //Oct 7  Oct 14  Oct 21  Oct 28  Nov 4  Nov 11  Nov 18  Nov 25  Dec 2  Dec 9  Dec 16  Dec 23  Jan 6  Jan 13  Jan 20  Jan 27  Feb 3  Feb 10
-        7,      8,      10,     8,      7,     8,      9,      8,      7,     8,      9,      8,      12,    14,     15,     14,     16,    14,
-    ],
-    ec2Current: [
-      2, 2, 2, 2.5, 2.5, 3, 3, 3, 3, 3.5, 3.5, 4, 5.5, 6, 7, 6, 5.5, 5,
-    ],
-    ec2Prior: [
-      3, 3, 4.5, 3.5, 3, 3.5, 3.5, 3, 2.5, 3.5, 3.5, 3, 4, 4.5, 4, 5, 4.5, 4,
-    ],
-    trials: [
-      3000, 2900, 3200, 4000, 4200, 4500, 4800, 5000, 3700, 4500, 5000, 5500, 6000, 6200, 6500, 6800, 7000, 6500,
-    ],
-  }),
+const revenueChart: MetricGroupChart = {
+  data: [
+    { date: "Control", values: { t2p: 18.36, eltvPerUser: 104.82 } },
+    { date: "Test", values: { t2p: 18.30, eltvPerUser: 111.46 } },
+  ],
   series: [
-    { key: "ec1Current", label: "2025-26 Created 1+", color: "#4f46e5" },
-    { key: "ec1Prior",   label: "2024-25 Created 1+", color: "#4f46e5", style: "dashed" },
-    { key: "ec2Current", label: "2025-26 Created 2+", color: "#06b6d4" },
-    { key: "ec2Prior",   label: "2024-25 Created 2+", color: "#06b6d4", style: "dashed" },
-    { key: "trials",     label: "Trials (2025-26)",   color: "#9ca3af", yAxis: "right", areaFill: true },
+    { key: "t2p",         label: "T2P conversion",       color: "#4f46e5" },
+    { key: "eltvPerUser", label: "ELTV per exposed user", color: "#06b6d4", yAxis: "right" },
   ],
   leftAxisUnit: "%",
-  rightAxisLabel: "Trials",
+  rightAxisUnit: "",
+  rightAxisLabel: "ELTV ($)",
+  chartType: "bar",
 };
 
 const blocks: ContentBlock[] = [
-  /* ── Situation ── */
+  /* ── Overview ── */
   {
     type: "section",
     title: "Overview",
     content: (
       <>
         <p>
-          A large share of trial users first interact with Constant Contact on
-          mobile web. But the existing mWeb experience wasn&rsquo;t designed for
-          activation. Many core workflows either didn&rsquo;t exist on mobile web
-          or were buried behind desktop-oriented interfaces that weren&rsquo;t
-          usable on a small screen. Users couldn&rsquo;t complete key actions
-          like creating an email, managing contacts, or connecting social
-          accounts without hitting dead ends or being redirected to desktop.
-        </p>
-        <p className="mt-4">
-          This was a zero-to-one effort. We weren&rsquo;t optimizing an existing
-          mobile flow. We were designing and building a complete activation
-          experience for mobile web from scratch, then running it as an
-          experiment to measure how users interacted with it.
+          Mobile web had significant ad-driven trial traffic but no way for users
+          to activate. I designed and built a gamified activation experience from
+          scratch, guiding users step-by-step through email verification, address
+          entry, contact import, and email creation and sending. We shipped it as
+          an A/B test across 25,469 users. Email sends lifted 10.6%, email
+          verification surged 4.8%, and test converters chose higher-value plans
+          (+6.7% ELTV). The net revenue impact was an estimated +$861K annually.
         </p>
         <div className="mt-6 grid grid-cols-3 gap-2">
           {[
-            { value: "+69%", label: "First email sends" },
-            { value: "+77%", label: "Second email sends" },
-            { value: "+83%", label: "Third email sends" },
+            { value: "+10.6%", label: "Email send rate" },
+            { value: "+6.7%", label: "Higher ELTV per converter" },
+            { value: "+$861K", label: "Est. annual revenue" },
           ].map((m) => (
             <div
               key={m.label}
@@ -164,7 +92,6 @@ const blocks: ContentBlock[] = [
                 border: "1px solid var(--v2-border)",
                 backdropFilter: "blur(12px)",
                 borderRadius: 12,
-                boxShadow: "var(--v2-card-shadow)",
               }}
             >
               <span className="text-[1rem] md:text-[1.1rem] font-bold tracking-tight font-[family-name:var(--font-inter)]" style={{ color: "var(--color-accent)" }}>
@@ -180,50 +107,122 @@ const blocks: ContentBlock[] = [
     ),
   },
 
-  /* ── Tension ── */
+  /* ── The Problem ── */
   {
     type: "section",
     title: "The Problem",
     content: (
       <>
         <p>
-          On desktop, sending an email requires completing email verification,
-          adding a physical address, creating a campaign, adding contacts, and
-          navigating to the send flow. On mobile web, several of these steps
-          simply weren&rsquo;t possible. Users would start the activation path
-          and hit a wall where the functionality didn&rsquo;t exist yet.
+          Activation at Constant Contact means a trial user becomes
+          "send-ready." They've verified their email,
+          added a physical address, imported at least two contacts, and created
+          and sent two or more email campaigns. Users who hit that bar convert
+          to paid at dramatically higher rates. It's the single most
+          important behavioral milestone in the trial funnel.
         </p>
         <p className="mt-4">
-          For the steps that were technically available, there was no clear
-          sequencing. Users didn&rsquo;t know what was required, what order to
-          do it in, or how close they were to being able to send. The core issue
-          was that mobile web had no structured activation path at all.
+          On desktop, each of those steps had a dedicated flow. On mobile web,
+          most of them didn't exist at all. Users would land from an ad,
+          poke around, hit a dead end, and leave. Pages redirected users into
+          parts of the app that weren't mobile-friendly. Flows that
+          technically worked would trap users if they tried to do anything
+          before activating. There was no sequencing, no guidance, and no
+          way to complete the path.
         </p>
         <p className="mt-4">
-          This work was sponsored by the Chief Growth Officer and sat within our
-          PLG growth pod focused on trial-to-activation conversion.
+          When I joined the PLG Growth Team in November 2024, our mandate was
+          to move Activation and Trial-to-Paid conversion. MWeb was the obvious
+          place to start: significant ad-driven traffic with zero activation
+          infrastructure.
         </p>
       </>
     ),
   },
 
-  /* ── Approach: Progression system ── */
+  /* ── Hypothesis ── */
   {
     type: "section",
-    title: "Designing the Activation Path",
+    title: "The Hypothesis",
     content: (
       <>
         <p>
-          The first design decision was to give users a visible model of
-          progress. I mapped every prerequisite (email verification, physical
-          address, contacts, email creation) to a tiered progression system. Each
-          completed step moved the user to a new level, and each level unlocked
-          the next meaningful action.
+          We hypothesized that if we built a clear, step-by-step path guiding
+          mobile web users through every activation prerequisite, we'd
+          improve both the activation rate and downstream conversion. Our growth
+          team (three PMs, five engineers, and myself as the designer)
+          aligned on the approach, scoped feasibility, and instrumented
+          metrics so we could call the experiment within two to three weeks of
+          traffic.
         </p>
         <p className="mt-4">
-          This did two things. It gave users a reason to complete setup steps
-          they would otherwise skip, and it gave us a framework to sequence the
-          experience around activation rather than feature discovery.
+          But giving users a checklist wasn't enough. These are small
+          business owners. They're thinking about their next sale, not
+          about configuring an email platform. I hypothesized that
+          gamifying the setup process (rewarding each completed step,
+          making the next action obvious, and showing users how close they were
+          to being done) would push completion rates higher than a
+          standard onboarding flow.
+        </p>
+      </>
+    ),
+  },
+
+  /* ── Execution: Audit ── */
+  {
+    type: "section",
+    title: "Clearing the Path",
+    content: (
+      <>
+        <p>
+          I started by auditing the entire mWeb experience. Every page that
+          didn't contribute to activation for trial users got cut or
+          reworked. Redirect traps that sent users into desktop-oriented dead
+          ends were removed. Pages that technically loaded but weren't
+          usable on a phone were pulled. The goal was to strip away anything
+          that could distract or stall a new user before they reached a
+          send-ready state.
+        </p>
+        <p className="mt-4">
+          There was one hard blocker: mWeb had no email editor. You can't
+          ask users to create and send emails if there's no way to compose
+          one. We built and shipped the{" "}
+          <a href="/mobileeditor" className="underline" style={{ color: "var(--color-accent)" }}>
+            mobile email editor
+          </a>{" "}
+          as a prerequisite, validating it as a standalone experiment before
+          moving on to the broader activation experience.
+        </p>
+      </>
+    ),
+  },
+
+  /* ── Execution: Progression system ── */
+  {
+    type: "section",
+    title: "Designing the Progression System",
+    content: (
+      <>
+        <p>
+          With the editor in place, I designed a dashboard that stepped users
+          through activation as a series of levels. Each completed prerequisite
+          (verify email, add address, import contacts, create an email,
+          send it) triggered a bottom sheet congratulating the user and
+          presenting the next step. Not a progress bar. A progression system,
+          where each level was its own moment.
+        </p>
+        <p className="mt-4">
+          We designed per-step progression intentionally. Individual levels
+          could later become multi-step sequences with their own experience
+          bars, gaining XP before leveling up. For the initial
+          experiment, each level was a single action, but the architecture
+          supported the future depth we were planning for.
+        </p>
+        <p className="mt-4">
+          Design and engineering partnered closely here, particularly on how
+          progression state would persist across sessions, how the level-up
+          moments would animate without blocking the flow, and how the system
+          would scale when we expanded it.
         </p>
       </>
     ),
@@ -232,33 +231,33 @@ const blocks: ContentBlock[] = [
     type: "image",
     src: "/images/mweb/LevelFlow.jpg",
     alt: "Level flow diagram mapping prerequisite completion to user progression tiers",
-    caption: "How each prerequisite maps to a progression tier, from Getting Started through Audience Builder",
+    caption: "Each activation prerequisite maps to a progression tier, from Getting Started through Audience Builder",
   },
   {
     type: "image",
     src: "/images/mweb/Levels.jpg",
     alt: "Mobile UI showing the four-stage level-up progression system",
-    caption: "The progression system as users experience it on mobile, with level-up moments reinforcing each completed step",
+    caption: "The progression system as users experience it, with level-up moments after each completed step",
   },
 
-  /* ── Approach: Email surface ── */
+  /* ── Execution: Email surface ── */
   {
     type: "section",
     title: "Simplifying the Email Surface",
     content: (
       <>
         <p>
-          The email page was the most important surface in the experiment. For
-          first-time visitors, the previous version showed a generic marketing
-          overview with no clear entry point. I redesigned it to adapt based on
-          where the user was in their activation journey.
+          The email page was the most important surface in the experiment. The
+          previous version showed a generic marketing overview with no entry
+          point. I redesigned it to adapt based on where the user was in their
+          journey.
         </p>
         <p className="mt-4">
-          A first-time visitor sees a single clear action: send an email. After
-          creating a draft, the page shifts to show their in-progress work with
-          a prominent send button. Once they&rsquo;ve sent, it becomes a
-          performance dashboard. The page always reflects what the user should do
-          next rather than everything the product can do.
+          A new user sees a single clear action: create an email. After
+          drafting, the page shifts to show their in-progress work with a
+          prominent send button. Once they've sent, it becomes a
+          performance view. The page always reflects what the user should do
+          next, not everything the product can do.
         </p>
       </>
     ),
@@ -270,7 +269,7 @@ const blocks: ContentBlock[] = [
     caption: "The email page adapts as users progress, from first visit through creation to performance tracking",
   },
 
-  /* ── Approach: Contacts ── */
+  /* ── Execution: Contacts ── */
   {
     type: "section",
     title: "Rethinking Contacts",
@@ -282,11 +281,10 @@ const blocks: ContentBlock[] = [
           management screen before they had any contacts to manage.
         </p>
         <p className="mt-4">
-          I simplified this into a focused add-contacts flow that surfaced at the
-          right moment in the progression. Users could quickly add contacts
-          manually, paste a list, or connect a third-party source like Google
-          Contacts. The goal was to get users past this gate without making it
-          feel like a separate task.
+          I simplified it into a focused add-contacts flow that surfaced at the
+          right moment in the progression. Users could quickly add a contact
+          manually, paste a list, or pull from Google Contacts. The goal was to
+          get them past the gate without it feeling like a separate task.
         </p>
       </>
     ),
@@ -298,7 +296,7 @@ const blocks: ContentBlock[] = [
     caption: "The contacts experience: list view, quick add, and third-party import options",
   },
 
-  /* ── Approach: Social ── */
+  /* ── Execution: Social ── */
   {
     type: "section",
     title: "Extending the Framework",
@@ -307,18 +305,16 @@ const blocks: ContentBlock[] = [
         <p>
           We applied the same activation-first approach to other channel
           surfaces, including social. At the time of this experiment, social
-          posting wasn&rsquo;t available on mobile web. The platform
-          didn&rsquo;t support it yet. So the scope for this surface was
-          intentionally limited: users could connect their social accounts and
-          see follower counts by platform, but they couldn&rsquo;t create or
-          publish posts.
+          posting wasn't available on mobile web because the platform
+          didn't support it yet. So the scope was intentionally limited:
+          users could connect accounts and see follower counts, but
+          couldn't create posts.
         </p>
         <p className="mt-4">
           Even with that constraint, the design followed the same pattern as
-          email: clear primary action, relevant data, and no feature clutter.
-          The goal was to establish the surface and start collecting signal on
-          how users engaged with it, so we could make informed decisions about
-          what to build next.
+          email: clear primary action, relevant data, and nothing extraneous.
+          The goal was to establish the surface and collect signal on engagement,
+          so we could make informed decisions about what to build next.
         </p>
       </>
     ),
@@ -330,28 +326,46 @@ const blocks: ContentBlock[] = [
     caption: "The social surface at launch: account connection and follower analytics, scoped to what the platform supported",
   },
 
-  /* ── Evidence ── */
+  /* ── Purpose ── */
+  {
+    type: "section",
+    title: "What This Was Really About",
+    content: (
+      <>
+        <p>
+          This project served two purposes beyond the metrics. The first was
+          getting users to value faster: reaching a send-ready state
+          where they experience the core product before their trial runs out.
+        </p>
+        <p className="mt-4">
+          The second was establishing trust. Our users rely on us to handle
+          the hard parts of marketing for them. This activation path was a
+          first step in building that relationship: showing them we'll
+          tell them exactly what to do next, celebrate their progress, and
+          make sure they don't get lost along the way.
+        </p>
+      </>
+    ),
+  },
+
+  /* ── Results ── */
   {
     type: "section",
     title: "Results",
     content: (
       <>
         <p>
-          The experiment ran for three weeks across 10,610 mobile web accounts
-          (direct traffic only, 14-day activity window, holiday period excluded).
-          Statistical analysis included two-proportion z-tests, t-tests, and
-          Bayesian methods. All primary metrics reached strong statistical
-          significance.
+          The experiment ran as an A/B test through Statsig from December 22,
+          2025 to January 27, 2026. The control group (12,670 users) saw the
+          original mWeb experience. The test group (12,799 users) saw the
+          simplified, gamified activation path.
         </p>
         <p className="mt-4">
-          The charts below overlay the same Oct-to-Feb window from both years.
-          Dashed lines show the prior year baseline (2024-25). Solid lines show
-          the experiment period (2025-26). The divergence starting around
-          December is where the redesigned experience went live.
-        </p>
-        <p className="mt-4 font-semibold" style={{ color: "var(--v2-text)" }}>
-          The results validated the hypothesis that reducing cognitive overhead
-          on mobile web would directly improve activation.
+          Sending improved across every MEQ bucket, with the biggest gain in
+          first-time senders. Second login also ticked up, suggesting users
+          were coming back to continue where they left off. The experience
+          didn't just push more users through the funnel; it gave them a reason
+          to return.
         </p>
       </>
     ),
@@ -360,62 +374,65 @@ const blocks: ContentBlock[] = [
     type: "metrics",
     groups: [
       {
-        title: "Email Sending Participation",
+        title: "Email Sending",
         description:
-          "Sending is the core activation behavior. The prior year held flat at ~2% while the experiment period climbed to 5-6%, a sustained lift that appeared immediately after launch.",
+          "The core activation behavior. The simplified experience drove a +10.6% lift in email sends, with the strongest gains in first-time senders (+12.7%) and power senders (+16.9%). Second email sends were roughly flat, suggesting the lift came from getting more users to their first send and encouraging repeat behavior.",
         metrics: [
-          { value: "+69.3%", label: "Accounts sending 1+ emails" },
-          { value: "+76.5%", label: "Accounts sending 2+ emails" },
-          { value: "+83.4%", label: "Accounts sending 3+ emails" },
+          { value: "+10.6%", label: "Sent any email (13.9% → 15.4%)" },
+          { value: "+12.7%", label: "Sent first email (8.4% → 9.4%)" },
+          { value: "-1.4%", label: "Sent second email (2.8% → 2.8%)" },
+          { value: "+16.9%", label: "Sent 3+ emails (2.7% → 3.2%)" },
         ],
         chart: sendingChart,
       },
       {
-        title: "Activation Prerequisites",
+        title: "Funnel and Engagement",
         description:
-          "Both are required before sending. Physical address completion jumped from ~7% (prior year) to ~45-55%, and email verification rose from ~30% to ~40%. These gains directly enabled the send lifts.",
+          "Email verification saw the single largest metric improvement across all three experiments (+4.8%), and physical address completion rose +2.8%. The simplified flow reduced the steps between landing and completing these critical setup milestones. Second login also improved, a signal that users are returning to continue their progression.",
         metrics: [
-          { value: "+11.7%", label: "Email verification" },
-          { value: "+5.4%", label: "Physical address completion" },
+          { value: "+4.8%", label: "Email verified (66.5% → 69.7%)" },
+          { value: "+2.8%", label: "Physical address (66.4% → 68.2%)" },
+          { value: "+1.8%", label: "Second login (45.5% → 46.3%)" },
+          { value: "+0.2%", label: "Email created (30.6% → 30.6%)" },
         ],
-        chart: prerequisitesChart,
+        chart: funnelChart,
       },
       {
-        title: "Email Creation Depth",
+        title: "Revenue Impact",
         description:
-          "Both years show a similar upward trend in single-email creation, but multi-email creation (2+) diverged sharply in the experiment period, rising from ~2-3% to 5-7%.",
+          "Conversion was essentially flat (-0.3%), but test converters chose higher-tier plans, resulting in +6.7% higher ELTV ($609 vs $571). The net effect: +$6.64 in lifetime value per exposed user, translating to an estimated +$861K in annual revenue at scale.",
         metrics: [
-          { value: "+8.9%", label: "1+ emails created" },
-          { value: "+25.3%", label: "2+ emails created" },
-          { value: "+35.7%", label: "3+ emails created" },
+          { value: "-0.3%", label: "T2P conversion (18.4% → 18.3%)" },
+          { value: "+6.7%", label: "ELTV per converter ($571 → $609)" },
+          { value: "+$861K", label: "Est. annual revenue impact" },
         ],
-        chart: creationChart,
+        chart: revenueChart,
       },
     ],
   },
 
-  /* ── Reflection ── */
+  /* ── Trade-offs ── */
   {
     type: "section",
     title: "Trade-offs and Iterations",
     content: (
       <>
         <p>
-          Trial-to-paid conversion remained neutral, which confirmed there was no
-          monetization risk.
+          Conversion was essentially flat (-0.3%), which initially seemed
+          underwhelming. But the ELTV data told a different story: test
+          converters were choosing higher-tier plans at a 6.7% higher rate
+          ($609 vs $571). The net revenue per exposed user was +$6.64, which
+          at scale translates to the largest estimated revenue impact of all
+          three experiments.
         </p>
         <p className="mt-4">
-          The one metric that moved in the wrong direction was contact addition
-          depth at 3+ contacts. The initial design surfaced a single-contact add
-          sheet, which made it easy to add one contact but harder to add several
-          at once. The previous bulk-add pattern let users reach 3+ contacts in a
-          single action.
-        </p>
-        <p className="mt-4">
-          We addressed this in a follow-up iteration by introducing a
-          multi-contact paste flow alongside the single-add option. This
-          preserved the simplicity of the initial experience while recovering the
-          depth that bulk-add had provided.
+          Contact addition depth was mixed. MEQ-2 contacts improved (+7.9%),
+          but MEQ-3 (3+ contacts) dropped 5.3%. The initial design surfaced a
+          single "add contact" sheet that made it easy to add one or two
+          contacts but didn't encourage bulk importing. We addressed this in a
+          follow-up iteration with a multi-paste flow where users can copy and
+          paste emails directly, and the system parses and adds them
+          automatically.
         </p>
       </>
     ),
@@ -423,53 +440,70 @@ const blocks: ContentBlock[] = [
   {
     type: "image",
     src: "/images/mweb/ContactsUpdate.jpg",
-    alt: "Comparison of single contact add sheet versus the multi-contact iteration",
+    alt: "Comparison of single contact add sheet versus the multi-contact paste iteration",
     caption: "Left: the initial single-contact sheet. Right: the follow-up iteration with multi-contact paste support.",
   },
+
+  /* ── Reflection ── */
   {
     type: "section",
     title: "Reflection",
     content: (
       <>
         <p>
-          This experiment changed how the team thought about mobile web. Before
-          this work, mWeb was treated as a limited version of desktop where most
-          things didn&rsquo;t work. After it, we had evidence that a
-          purpose-built mobile experience with its own sequencing and priorities
-          could outperform the desktop-derived version on every activation
-          metric.
+          Before this project, mWeb was treated as a limited version of desktop
+          where most things didn't work. After it, we had evidence that
+          a purpose-built mobile experience with its own sequencing and
+          priorities could move activation metrics that the desktop-derived
+          version never touched.
         </p>
         <p className="mt-4">
-          The experiment was recommended for full rollout and influenced broader
-          product strategy toward lower cognitive overhead experiences across
-          other constrained surfaces.
+          The experiment was called a success and recommended for continued
+          iteration. We used the data to prioritize the contacts multi-paste
+          fix, then moved on to identifying other friction points in the
+          activation flow, each one scoped as its own hypothesis and
+          shipped incrementally.
         </p>
         <p className="mt-4">
-          The natural next step is expanding what users can actually do on mobile
-          web. This experiment proved the activation framework works. Now the
-          opportunity is to make the feature set more robust so that mWeb becomes
-          a surface where users can complete more of their core workflows: social
-          posting, event creation, and deeper campaign management. The data from
-          this experiment gives us a baseline to measure each of those additions
-          against.
+          The bigger takeaway was about the framework itself. The gamified
+          progression system gave us a structure we could extend: new activation
+          steps, deeper multi-step levels, and eventually a foundation for how
+          we onboard users across other surfaces. The architecture was designed
+          for that from the start, and the results justified continuing to
+          invest in it.
         </p>
         <p className="mt-4">
-          Beyond feature expansion, I would focus on:
+          If I were to keep pushing on this, the next priorities would be:
         </p>
         <ol className="list-decimal pl-5 mt-3 space-y-2">
           <li>
             Measuring long-term retention and send frequency for users who
-            activated through the simplified mWeb path, to understand whether
-            faster activation translates to sustained engagement.
+            activated through the mWeb path, to understand whether faster
+            activation translates to sustained engagement and not just
+            front-loaded behavior.
           </li>
           <li>
-            Applying the progression framework to other constrained surfaces like
-            the native app onboarding, where similar sequencing problems exist.
+            Expanding what users can do on mobile web (social posting,
+            deeper campaign management, event creation) using the
+            activation framework as the onboarding layer for each new surface.
           </li>
           <li>
-            Testing whether the level-up system itself drives behavior or whether
-            the structural simplification alone accounts for the lift. Isolating
-            that signal would inform how we invest in gamification going forward.
+            Isolating the gamification signal. The experiment proved the full
+            package works, but we don't yet know how much of the lift
+            comes from the progression system itself versus the structural
+            simplification. Teasing those apart would tell us how much to
+            invest in gamification going forward.
+          </li>
+          <li>
+            Solving the physical address problem. The fact that physical
+            address completion stayed flat despite every other prerequisite
+            improving points to a deeper issue: many small businesses
+            simply don't have a mailing address ready when they sign
+            up. No amount of clearer UX can fix that if the information
+            doesn't exist yet. A future experiment could explore
+            alternatives like delayed collection, progressive
+            disclosure, or letting users proceed without it and prompting
+            them closer to their first send.
           </li>
         </ol>
       </>
@@ -480,8 +514,8 @@ const blocks: ContentBlock[] = [
 export default function MobileWebExperiencePage() {
   return (
     <CaseStudyLayout
-      title="Simplified Mobile Web Experience"
-      subtitle="PLG Growth Experiment | Dec 2025 – Jan 2026"
+      title="Mobile Web Activation Experience"
+      subtitle="PLG Growth Experiment | A/B Test | Dec 22, 2025 – Jan 27, 2026"
       role={role}
       team={team}
       tools={tools}
